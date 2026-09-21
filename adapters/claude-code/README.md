@@ -16,6 +16,11 @@ What it adds on top of the core:
   the tool, not by politeness.
 - **Immutability hook** (`.claude/hooks/protect-shipped.sh`): edits under `specs/done/` are
   physically rejected.
+- **Security, backed by a real tool, not just a checklist line**: `reviewer` is instructed to
+  invoke the built-in `security-review` skill for the security dimension of every REVIEW (see
+  `docs/security.md`). For an ad hoc deep dive outside the mandatory gate — before a risky PR, or
+  periodically — invoke `security-review` yourself against the current branch; it doesn't need a
+  workflow step to be useful on demand.
 
 All defaults are adjustable — see "Adapting it" in the root README.
 

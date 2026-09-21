@@ -5,13 +5,19 @@
 # .NET example:
 # build: dotnet build --nologo -warnaserror
 # test: dotnet test --nologo
+# security: dotnet list package --vulnerable --include-transitive
 #
 # Node example:
 # lint: npm run lint
 # typecheck: npm run typecheck
 # test: npm test
+# security: npm audit --audit-level=high
 #
 # Python example:
 # lint: ruff check .
 # types: mypy .
 # test: pytest -q
+# security: pip-audit && bandit -r . -q
+#
+# security is docs/security.md's "Automated checks" made real — a scripts/check.conf without a
+# security step means nobody is actually enforcing docs/security.md, they're just reading it.

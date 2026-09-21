@@ -22,8 +22,10 @@ what is deliberately NOT being done. Decisions from clarifying questions are fol
 
 ## Definition of Done
 - [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
-- [ ] `scripts/check` green
+- [ ] `scripts/check` green (this includes the security step — see docs/security.md)
 - [ ] Independent review done; real findings fixed, noise rejected with written rationale
+- [ ] Security dimension of review explicitly addressed: clean, or findings triaged (not silently
+      skipped because nothing "looked" dangerous)
 - [ ] Docs / ADRs updated if behavior or architecture changed
 - [ ] Spec moved to `specs/done/` (it becomes immutable there)
 
