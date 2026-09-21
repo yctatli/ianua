@@ -7,9 +7,11 @@ Codex CLI reads **AGENTS.md natively** (repo root down to cwd, plus your own `~/
 — no pointer file needed, unlike the Copilot/Cursor adapters. What this adapter adds on top:
 
 - **Skills** (`.agents/skills/`): `bootstrap`, `new-feature`, `fix-bug`, `refactor`, `review`,
-  `verify`, `adr`, `recover` — one per workflow. Invoke explicitly with `$<name>`, or let Codex
-  match one from your prompt (implicit invocation, via each skill's `description`). Thin by
-  design: they point to `workflows/` and `prompts/`, they don't restate them.
+  `security`, `verify`, `adr`, `recover` — one per workflow. Invoke explicitly with `$<name>`, or
+  let Codex match one from your prompt (implicit invocation, via each skill's `description`). Thin
+  by design: they point to `workflows/` and `prompts/`, they don't restate them. `security` is a
+  genuinely independent pass (`docs/roles/security.md`) — mandatory in strict mode alongside
+  `review`, optional/on-demand in lite mode — not a duplicate of `review`'s own security bullet.
 - **PreToolUse hook** (`.codex/hooks/policy.py`, wired in `.codex/hooks.json`): blocks writes
   under `specs/done/` and a handful of destructive git ops (force push, hard reset, rebase,
   `rm -rf`) — the same rules the Claude Code adapter enforces, ported to Codex's hook contract.

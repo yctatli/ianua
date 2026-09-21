@@ -9,7 +9,7 @@ different tool — a second window/terminal (or a read-only subagent) is enough.
 Start the session with one line:
 
 ```
-Your role: <Analyst|Developer|Reviewer|QA>. Read docs/roles/README.md and <role>.md.
+Your role: <Analyst|Developer|Reviewer|Security|QA>. Read docs/roles/README.md and <role>.md.
 Assume the role for <spec/feature>. Tell me in two sentences who you are and what you may NOT do.
 Start only after my confirmation.
 ```
@@ -24,8 +24,10 @@ Start only after my confirmation.
    auditor who has read the builder's "here's why I did it" starts convinced.
 3. Fixes happen in the Developer session; evidence is re-checked by the Reviewer/QA session.
 4. Hat switches inside one session (Analyst → Developer) are **announced**, never silent.
-5. In **strict** mode, role separation is mandatory. In **lite** mode, the independent review
-   session/subagent is still required; the rest may collapse into one session.
+5. In **strict** mode, role separation is mandatory — this includes a dedicated Security pass,
+   separate from Reviewer (`docs/roles/security.md`, `prompts/security-review.md`). In **lite**
+   mode, the independent review session/subagent is still required; the rest may collapse into one
+   session, including Security into Reviewer's own security dimension (`docs/security.md`).
 
 ## Shared rules (all roles)
 

@@ -1,6 +1,7 @@
 # ADR 0003 — Security as an enforced check, not just a review lens
 
-- Status: Accepted
+- Status: Superseded by ADR-0004 (the "no dedicated Security role" alternative below was reversed;
+  the automated-checks and skill-invocation decisions in this ADR still stand)
 - Date: 2026-09-21
 
 ## Context

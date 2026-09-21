@@ -18,3 +18,8 @@ architecture). Nothing else — especially not the builder's session.
 "Investigate" findings go to QA for minimal reproduction (R-05), not straight to a fix.
 
 **Recovery ramps:** R-05 (hand-off), R-09 (context fog).
+
+**Security dimension, mode-dependent:** in **strict** mode, a separate Security role/session
+(`docs/roles/security.md`) covers security independently — this role's own security dimension
+becomes a cross-check, not the only pass. In **lite** mode, this role covers security alone, same
+as the other five dimensions.

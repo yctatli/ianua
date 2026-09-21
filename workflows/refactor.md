@@ -16,4 +16,6 @@ BASELINE → SCOPE & PLAN → [APPROVAL] → REFACTOR → PROVE UNCHANGED → RE
 5. **PROVE UNCHANGED.** Same tests green, zero test edits (a needed test edit means behavior
    changed — stop, that's a feature). Performance-sensitive paths: measure before/after (R-12).
 6. **REVIEW** — fresh session. Extra lens: did semantics sneak in? Are names/layers now *more*
-   aligned with `docs/architecture.md`?
+   aligned with `docs/architecture.md`? Strict mode, if the refactor touches security-sensitive
+   code: also a separate Security pass (`docs/roles/security.md`) — structure changes can silently
+   move a trust boundary even when "behavior" is unchanged.

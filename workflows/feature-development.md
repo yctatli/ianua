@@ -13,7 +13,7 @@ INTENT → CLARIFY → SPEC → PLAN → [APPROVAL] → BUILD → REVIEW → [TR
 | 3 | **PLAN** — create `specs/plans/NNNN-plan.md` | Developer | `prompts/plan.md` | Files + steps + risks (with recommendations) + criterion↔test map. **No code.** |
 | 4 | **APPROVAL** | Human | — | **[GATE: human]** Plan touches every criterion? Blast radius sane? Risks honest? Approval recorded in the plan file. |
 | 5 | **BUILD** | Developer | `prompts/build.md` | Branch per `docs/git.md`; steps match plan; `scripts/check` green. Deviation → R-07. |
-| 6 | **INDEPENDENT REVIEW** — fresh session / read-only subagent | Reviewer | `prompts/review.md` | Findings with evidence (file:line) across all six dimensions, or "clean". |
+| 6 | **INDEPENDENT REVIEW** — fresh session(s) / read-only subagent(s) | Reviewer (+ Security, strict mode) | `prompts/review.md` (+ `prompts/security-review.md` in strict) | Findings with evidence (file:line) across all six dimensions, or "clean". Strict mode: Security runs as its own independent pass, not a bullet inside Reviewer's — `docs/roles/security.md`. |
 | 7 | **TRIAGE** | Human | — | **[GATE: human]** Each finding: real (fix) / noise (reject, write why) / investigate (→ QA, R-05). |
 | 8 | **FIX ROUNDS** | Developer | `prompts/build.md` §fixes | Only real findings. Re-review the fix diff (step 6, narrow scope). Rounds > 3 → R-06. |
 | 9 | **VERIFY** | QA | `prompts/verify.md` | Criterion ↔ evidence table complete. UI criteria: screenshot = evidence. |

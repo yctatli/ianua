@@ -19,3 +19,8 @@ Order findings by severity. Each finding carries a recommended action (proposal 
 Do not invent findings to appear useful — "clean" is a valid verdict. I will triage:
 real / noise / investigate.
 ```
+
+In **strict** mode, security may instead get its own dedicated, independent pass
+(`prompts/security-review.md`, `docs/roles/security.md`) — when that's run, this review's security
+bullet is a cross-check, not the only pass. In **lite** mode (or whenever no dedicated pass ran),
+this review is the only security check — do not skip that bullet.

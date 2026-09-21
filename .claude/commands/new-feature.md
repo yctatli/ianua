@@ -10,8 +10,11 @@ subagent it belongs to, by cost/quality tier (adapters/claude-code/README.md, "M
 - CLARIFY, SPEC, PLAN → `planner` subagent (prompts/clarify.md, spec.md, plan.md).
 - BUILD → per plan step: `test-writer` first (red test from the criterion↔test map), then
   `builder` to turn it green (prompts/build.md). Builder never writes the tests itself.
-- REVIEW → `reviewer` subagent, diff + spec path only. Bring its findings back to me for triage
-  before any fixes — you (this session) never review your own work.
+- REVIEW → `reviewer` subagent, diff + spec path only. **Strict mode**: also delegate to the
+  `security` subagent (prompts/security-review.md) as an independent pass — not a Reviewer bullet.
+  **Lite mode**: `reviewer` covers the security dimension itself; run `security` too if the change
+  touches auth/input/data/dependencies. Bring findings back to me for triage before any fixes — you
+  (this session) never review your own work.
 - Fix rounds (real findings only) → `builder`.
 - VERIFY → `builder`, using prompts/verify.md and docs/roles/qa.md; no production-code writes.
 

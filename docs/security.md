@@ -25,8 +25,11 @@ gate, not just something a reviewer eyeballs. Two kinds, add what applies:
 A step that isn't wired into scripts/check.conf is advice an agent can silently skip; wire it in. -->
 
 ## Review lens
-Security is a mandatory dimension of every independent review (see `prompts/review.md`), not a
-separate afterthought phase — automated checks catch known patterns, the reviewer catches
-design-level issues (authz gaps, trust-boundary mistakes) no scanner will find. For a systematic
-pass beyond the reviewer's own read, Claude Code users can run the built-in `security-review`
-skill against the change set — see `adapters/claude-code/README.md`.
+Security is a mandatory dimension of every independent review, not a separate afterthought phase —
+automated checks catch known patterns, a human/model read catches design-level issues (authz gaps,
+trust-boundary mistakes) no scanner will find. **In strict mode** this is a dedicated, independent
+Security pass (`docs/roles/security.md`, `prompts/security-review.md`) — its own session, separate
+from Reviewer's. **In lite mode** it collapses into Reviewer's own security dimension
+(`prompts/review.md`) — still mandatory, just not a separate session by default. For a systematic
+pass beyond either read, Claude Code users can also run the built-in `security-review` skill
+against the change set — see `adapters/claude-code/README.md`.

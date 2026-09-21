@@ -9,7 +9,8 @@ Route by tier (adapters/claude-code/README.md, "Model routing"):
   rule: no fix before this test exists and is red for the right reason.
 - DIAGNOSE → `planner` subagent: root cause, not symptom (R-01). Diagnosis before any change.
 - FIX → `builder` subagent: smallest change that turns the reproduction test green.
-- REVIEW → `reviewer` subagent, narrow scope: the fix diff only.
+- REVIEW → `reviewer` subagent, narrow scope: the fix diff only. Strict mode, or the fix touches
+  auth/input/data handling: also `security` subagent (prompts/security-review.md).
 
 Stop at every human gate. The reproduction test is permanent — never weakened or removed to reach
 green.

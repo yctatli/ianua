@@ -11,6 +11,7 @@ Route by tier (adapters/claude-code/README.md, "Model routing"):
 - SCOPE & PLAN → `planner` subagent: boundaries, "no observable behavior change", prompts/plan.md.
 - REFACTOR → `builder` subagent: small, committable steps, suite green after each.
 - REVIEW → `reviewer` subagent: extra lens — did semantics sneak in, are names/layers now more
-  aligned with docs/architecture.md.
+  aligned with docs/architecture.md. Strict mode, or security-sensitive code: also `security`
+  subagent (prompts/security-review.md) — structure changes can move a trust boundary silently.
 
 Zero test edits during REFACTOR — a needed test edit means behavior changed: stop and tell me.
