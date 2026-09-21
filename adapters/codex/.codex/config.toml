@@ -1,0 +1,6 @@
+# ANEW suggested defaults for this project.
+# NOTE: Codex only loads project-scoped .codex/ files (this one, hooks.json, .agents/skills) once
+# you mark the repo "trusted" — see adapters/codex/README.md. Until then this file is ignored,
+# silently, by design.
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
