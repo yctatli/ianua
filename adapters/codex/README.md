@@ -12,9 +12,13 @@ Codex CLI reads **AGENTS.md natively** (repo root down to cwd, plus your own `~/
   by design: they point to `workflows/` and `prompts/`, they don't restate them. `security` is a
   genuinely independent pass (`docs/roles/security.md`) — mandatory in strict mode alongside
   `review`, optional/on-demand in lite mode — not a duplicate of `review`'s own security bullet.
-- **PreToolUse hook** (`.codex/hooks/policy.py`, wired in `.codex/hooks.json`): blocks writes
-  under `specs/done/` and a handful of destructive git ops (force push, hard reset, rebase,
-  `rm -rf`) — the same rules the Claude Code adapter enforces, ported to Codex's hook contract.
+- **PreToolUse core-file-lock hook** (`.codex/hooks/policy.py`, wired in `.codex/hooks.json`): two
+  tiers. `specs/done/` is always rejected, no override. This workspace's own process files
+  (`AGENTS.md`, `workflows/`, `prompts/`, `scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`,
+  spec/plan templates, `.claude/`/`.codex/`/`.agents/` themselves) are rejected too, unless
+  `ANEW_ALLOW_CORE_EDIT=1` is set. Also blocks a handful of destructive git ops (force push, hard
+  reset, rebase, `rm -rf`) — the same rules the Claude Code adapter enforces, ported to Codex's
+  hook contract. See `docs/decisions/0005-core-file-lock.md`.
 - **Suggested project config** (`.codex/config.toml`): `sandbox_mode = "workspace-write"`,
   `approval_policy = "on-request"`.
 
@@ -41,6 +45,12 @@ the tool enforces. For a real guarantee, start the REVIEW step in a **separate C
 `docs/roles/README.md`, "the mind that produces cannot audit itself") launched with the read-only
 sandbox: `sandbox_mode = "read-only"`, set via CLI flag, `config.toml`, or the in-session
 `/permissions` command.
+
+## Doing framework maintenance yourself (like this session did)
+
+If you're editing `workflows/`, `prompts/`, `docs/roles/`, `AGENTS.md`, an adapter, or anything
+else under the core-file-lock — set `ANEW_ALLOW_CORE_EDIT=1` for that session first, consciously.
+Without it the hook rejects the write with no ambiguity about why.
 
 ## A note on drift
 

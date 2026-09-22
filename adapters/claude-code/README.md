@@ -18,8 +18,12 @@ What it adds on top of the core:
   `docs/decisions/0004-dedicated-security-role.md`).
 - **Permission denies** (`.claude/settings.json`): force push, hard reset, `rm -rf` blocked by
   the tool, not by politeness.
-- **Immutability hook** (`.claude/hooks/protect-shipped.sh`): edits under `specs/done/` are
-  physically rejected.
+- **Core-file-lock hook** (`.claude/hooks/protect-shipped.sh`, runs on Edit/Write/Bash): two tiers.
+  `specs/done/` is always rejected, no override. This workspace's own process files (`AGENTS.md`,
+  `workflows/`, `prompts/`, `scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`, spec/plan
+  templates, and the installed `.claude/`/`.codex/`/`.agents/` themselves) are rejected too, unless
+  `ANEW_ALLOW_CORE_EDIT=1` is set — deliberately, for bootstrap or a dedicated ADR, never as a side
+  effect of ordinary feature/bugfix work. See `docs/decisions/0005-core-file-lock.md`.
 - **Security, backed by a real tool, not just a checklist line**: both `reviewer` (lite-mode
   fallback) and `security` (dedicated pass) are instructed to invoke the built-in `security-review`
   skill as part of their pass. For an ad hoc deep dive outside any workflow gate — before a risky
