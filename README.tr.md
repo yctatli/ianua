@@ -154,6 +154,33 @@ her modda ele alan iki küçük, dar kaçış valfi var:
   spec'in kendi omurgasının önüne geçen bir kısayol değil, bir pointer. `workflows/README.md`,
   "Epics" bölümüne bak; devam eden her şeyin özeti için `./scripts/status`'u çalıştır.
 
+## İlerlemeyi izleme
+
+Ayrı bir dashboard yok — görünürlük, açık tutman gereken bir arayüzden değil, workflow
+dosyalarından ve spec'lerin kendisinden gelir:
+
+- **Çalışırken:** ajan zaten workflow dosyasını adım adım okuyor ve her adımı chat'te anlatıyor —
+  "spec'i yazıyorum," "plan hazır, onayın gerekiyor," "build bitti, review'a devrediyorum." Her
+  **[GATE: human]**'da gerçekten durur ve bekler; plan onayını ya da bulgu triyajını asla kendi
+  başına geçmez.
+- **Herhangi bir anda, devam eden her şey için:**
+  ```bash
+  ./scripts/status      # nested kurulum: ./.ianua/scripts/status
+  ```
+  `specs/active/`'deki her spec'i okuyup Status'unu, Mode'unu, plan durumunu, Definition-of-Done
+  ilerlemesini (`3/6 checked` — spec'in kendi `- [x]` checkbox'larından türetilir) ve security
+  boyutunun ele alınıp alınmadığını gösterir — artı varsa epic'ler. Burada hiçbir şey elle
+  tutulmuyor; her seferinde aynı dosyalardan yeniden üretiliyor, o yüzden gerçeklikten asla sapmaz.
+- **Gerçekten yeşil mi?**
+  ```bash
+  ./scripts/check       # "==> build", "==> test", "==> security" diye basar — ilk hatada durur
+  ./scripts/doctor       # workspace sağlığı: yapı, ayarlanmış mode/dil, adapter varlığı
+  ```
+
+Özet: *şu an* ne olduğunu görmek için chat transcript'ini izle; *her şeyin* o anki özeti için
+`scripts/status`'u çalıştır; gerçekten geçip geçmediği için chat'teki bir iddiaya değil,
+`scripts/check`'in exit code'una güven.
+
 ## Kutunun içinde ne var
 
 Aşağıdaki yollar, Ianua'nın core'unun gerçekte yaşadığı yere görelidir: template kurulumda repo

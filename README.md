@@ -152,6 +152,33 @@ work is). Two small, narrow escape valves handle scope, in every mode:
   `specs/epics/` — a pointer, not a shortcut past any spec's own spine. See `workflows/README.md`,
   "Epics," and run `./scripts/status` for a rollup of everything in flight.
 
+## Monitoring progress
+
+There's no separate dashboard — visibility comes from the workflow files and the specs themselves,
+not a UI you have to keep open:
+
+- **While it's running:** the agent is literally reading the workflow file step by step and
+  narrating each one in chat — "writing the spec," "plan's ready, need your approval," "build
+  done, handing off to review." At every **[GATE: human]** it stops and genuinely waits; it never
+  advances past plan approval or finding triage on its own.
+- **At any point, across everything in flight:**
+  ```bash
+  ./scripts/status      # nested install: ./.ianua/scripts/status
+  ```
+  Reads every spec in `specs/active/` and prints its Status, Mode, plan status, Definition-of-Done
+  progress (`3/6 checked`, derived from the spec's own `- [x]` checkboxes), and whether the
+  security dimension of review is addressed or still open — plus any epics. Nothing here is
+  hand-maintained; it's regenerated from the same files every time, so it can't drift from reality.
+- **Is it actually green?**
+  ```bash
+  ./scripts/check       # prints "==> build", "==> test", "==> security", ... — stops at the first failure
+  ./scripts/doctor       # workspace health: structure, configured mode/language, adapter presence
+  ```
+
+So: watch the chat transcript for what's happening *right now*, run `scripts/status` for a
+point-in-time rollup of *everything*, and trust `scripts/check`'s exit code — not a claim in
+chat — for whether it actually passed.
+
 ## What's in the box
 
 Paths below are relative to wherever Ianua's core actually lives: the repo root in a template
