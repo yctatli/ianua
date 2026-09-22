@@ -17,7 +17,7 @@ Every workflow honors the gates of the current mode.
 4. **Evidence over claims.** "Done" requires `scripts/check` green and every acceptance criterion mapped to proof. Never claim completion without showing evidence.
 5. **Tests are protected.** Weakening asserts, deleting or skipping tests to get to green is forbidden — always.
 6. **Proposal rule.** Every question, option, or finding comes with your own recommendation and rationale. The human decides; nothing is applied without approval.
-7. **Shipped specs are immutable, and so is this workspace's own process.** Files under `specs/done/` are never edited. `AGENTS.md`, `workflows/`, `prompts/`, `scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`, and the spec/plan templates change only via bootstrap or a dedicated ADR, gated by `ANEW_ALLOW_CORE_EDIT=1` — never as a side effect of feature/bugfix work.
+7. **Shipped specs are immutable, and so is this workspace's own process.** Files under `specs/done/` are never edited. `AGENTS.md`, `workflows/`, `prompts/`, `scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`, and the spec/plan templates change only via bootstrap or a dedicated ADR, gated by `IANUA_ALLOW_CORE_EDIT=1` — never as a side effect of feature/bugfix work.
 8. **Uncertainty is surfaced, not assumed.** On ambiguity or a docs/code conflict: stop and use the matching recovery ramp (`prompts/recovery/`).
 
 ## Where things live

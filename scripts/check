@@ -1,5 +1,5 @@
 #!/bin/sh
-# ANEW check — THE single verification contract.
+# Ianua check — THE single verification contract.
 # Humans, agents, hooks, and CI all answer "is this good?" by running this one command.
 # Stack-specific internals live in scripts/check.conf (generated at bootstrap).
 # check.conf format: one step per line ->  <name>: <command>

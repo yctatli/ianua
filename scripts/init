@@ -1,5 +1,5 @@
 #!/bin/sh
-# ANEW init — installs an AI tool adapter into the repo root.
+# Ianua init — installs an AI tool adapter into the repo root.
 # Usage: ./scripts/init [claude-code|github-copilot|cursor|generic]
 set -e
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
@@ -42,8 +42,8 @@ case "$1" in
     ;;
   cursor)
     mkdir -p "$ROOT/.cursor/rules"
-    cp "$ADAPTERS/cursor/rules/anew.mdc" "$ROOT/.cursor/rules/anew.mdc"
-    echo "Installed: .cursor/rules/anew.mdc."
+    cp "$ADAPTERS/cursor/rules/ianua.mdc" "$ROOT/.cursor/rules/ianua.mdc"
+    echo "Installed: .cursor/rules/ianua.mdc."
     echo "Next: open Cursor here and paste prompts/bootstrap.md"
     ;;
   generic)

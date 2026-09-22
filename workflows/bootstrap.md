@@ -1,9 +1,9 @@
 # Workflow: Bootstrap
 
-**Goal:** adapt ANEW to *your* project — new or existing. Run once (rerunnable to revise).
+**Goal:** adapt Ianua to *your* project — new or existing. Run once (rerunnable to revise).
 **Prompt:** `prompts/bootstrap.md` · **Role:** Analyst (interview) → Developer (generation)
 
-**Before starting:** `export ANEW_ALLOW_CORE_EDIT=1` (or the session equivalent) — bootstrap writes
+**Before starting:** `export IANUA_ALLOW_CORE_EDIT=1` (or the session equivalent) — bootstrap writes
 `AGENTS.md`, `scripts/check.conf`, and (if adapters are installed) `.claude/`/`.codex/`/`.agents/`,
 all of which are protected by the core-file-lock hook (AGENTS.md rule 7) outside this flag.
 
@@ -11,7 +11,7 @@ all of which are protected by the core-file-lock hook (AGENTS.md rule 7) outside
 INSPECT → INTERVIEW → GENERATE → VERIFY → REPORT
 ```
 
-1. **INSPECT.** The agent examines the working tree. Empty (only ANEW files) → greenfield flow.
+1. **INSPECT.** The agent examines the working tree. Empty (only Ianua's own files) → greenfield flow.
    Contains code → adoption flow: detect stack(s), build system, test setup, and existing
    conventions *from the code*, to be confirmed rather than asked from scratch.
 

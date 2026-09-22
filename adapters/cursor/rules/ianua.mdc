@@ -1,5 +1,5 @@
 ---
-description: ANEW workspace rules pointer
+description: Ianua workspace rules pointer
 alwaysApply: true
 ---
 All project rules live in AGENTS.md at the repository root — the single source of truth. Read it

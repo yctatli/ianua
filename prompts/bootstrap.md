@@ -3,7 +3,7 @@
 ```
 Before anything else: this workspace's own process files (AGENTS.md, docs/roles/, docs/decisions/,
 workflows/, prompts/, scripts/, adapters/, and any installed .claude/.codex/.agents/) are protected
-by a core-file-lock hook (AGENTS.md rule 7). If ANEW_ALLOW_CORE_EDIT is not already set, tell me and
+by a core-file-lock hook (AGENTS.md rule 7). If IANUA_ALLOW_CORE_EDIT is not already set, tell me and
 wait — don't try to route around it.
 
 Read AGENTS.md and workflows/bootstrap.md. We are adapting this workspace to a real project.

@@ -1,5 +1,5 @@
 #!/bin/sh
-# ANEW doctor — workspace health check. Structure, configuration state, adapter presence.
+# Ianua doctor — workspace health check. Structure, configuration state, adapter presence.
 # Exit 0 = healthy (warnings allowed), exit 1 = broken structure.
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 fails=0
@@ -9,7 +9,7 @@ fail() { echo "FAIL  $1"; fails=$((fails + 1)); }
 warn() { echo "WARN  $1"; warns=$((warns + 1)); }
 ok()   { echo "ok    $1"; }
 
-echo "== ANEW doctor =="
+echo "== Ianua doctor =="
 
 # --- structure: required files ---
 for f in \

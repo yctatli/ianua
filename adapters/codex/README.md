@@ -16,7 +16,7 @@ Codex CLI reads **AGENTS.md natively** (repo root down to cwd, plus your own `~/
   tiers. `specs/done/` is always rejected, no override. This workspace's own process files
   (`AGENTS.md`, `workflows/`, `prompts/`, `scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`,
   spec/plan templates, `.claude/`/`.codex/`/`.agents/` themselves) are rejected too, unless
-  `ANEW_ALLOW_CORE_EDIT=1` is set. Also blocks a handful of destructive git ops (force push, hard
+  `IANUA_ALLOW_CORE_EDIT=1` is set. Also blocks a handful of destructive git ops (force push, hard
   reset, rebase, `rm -rf`) — the same rules the Claude Code adapter enforces, ported to Codex's
   hook contract. See `docs/decisions/0005-core-file-lock.md`.
 - **Suggested project config** (`.codex/config.toml`): `sandbox_mode = "workspace-write"`,
@@ -49,7 +49,7 @@ sandbox: `sandbox_mode = "read-only"`, set via CLI flag, `config.toml`, or the i
 ## Doing framework maintenance yourself (like this session did)
 
 If you're editing `workflows/`, `prompts/`, `docs/roles/`, `AGENTS.md`, an adapter, or anything
-else under the core-file-lock — set `ANEW_ALLOW_CORE_EDIT=1` for that session first, consciously.
+else under the core-file-lock — set `IANUA_ALLOW_CORE_EDIT=1` for that session first, consciously.
 Without it the hook rejects the write with no ambiguity about why.
 
 ## A note on drift

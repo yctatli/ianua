@@ -22,7 +22,7 @@ What it adds on top of the core:
   `specs/done/` is always rejected, no override. This workspace's own process files (`AGENTS.md`,
   `workflows/`, `prompts/`, `scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`, spec/plan
   templates, and the installed `.claude/`/`.codex/`/`.agents/` themselves) are rejected too, unless
-  `ANEW_ALLOW_CORE_EDIT=1` is set — deliberately, for bootstrap or a dedicated ADR, never as a side
+  `IANUA_ALLOW_CORE_EDIT=1` is set — deliberately, for bootstrap or a dedicated ADR, never as a side
   effect of ordinary feature/bugfix work. See `docs/decisions/0005-core-file-lock.md`.
 - **Security, backed by a real tool, not just a checklist line**: both `reviewer` (lite-mode
   fallback) and `security` (dedicated pass) are instructed to invoke the built-in `security-review`

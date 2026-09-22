@@ -1,8 +1,8 @@
-# ANEW — AI Native Engineering Workspace
+# Ianua — AI Native Engineering Workspace
 
 **A general-purpose, technology-agnostic bootstrap for building software with AI — under control.**
 
-> It doesn't matter what you're building. ANEW gives you a starting environment where context,
+> It doesn't matter what you're building. Ianua gives you a starting environment where context,
 > decisions, specs, roles, quality gates, and verification are managed in files — not lost in chat.
 
 Use this repo as a GitHub template (or drop it into an existing project), install the adapter for
@@ -22,7 +22,7 @@ mechanical channels:
 3. **Rules it cannot bypass.** Prose is advice; tooling is law. Hooks, permission denies, and CI
    gates don't rely on the agent remembering anything.
 
-Every file in ANEW connects to one of these channels — plus one more thing prose can't give you:
+Every file in Ianua connects to one of these channels — plus one more thing prose can't give you:
 **process memory.** Intent, decisions, and evidence live in files that survive every session.
 
 ## The three layers
@@ -41,7 +41,7 @@ Every file in ANEW connects to one of these channels — plus one more thing pro
 
 # 2. Bootstrap writes AGENTS.md / scripts/check.conf / adapter files, all protected by the
 #    core-file-lock hook (see "Design principles") — allow it for this session first:
-export ANEW_ALLOW_CORE_EDIT=1
+export IANUA_ALLOW_CORE_EDIT=1
 
 # 3. Open your AI tool and run the bootstrap workflow
 #    Claude Code:  /bootstrap
@@ -147,6 +147,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0006](docs/decisions/0006-security-severity-gating.md) | Security finding severity taxonomy (Critical/High/Medium/Low) + ship-gating | Accepted |
 | [0007](docs/decisions/0007-test-standards.md) | Test standards: risk-tiered levels, mandatory categories, named anti-patterns | Accepted |
 | [0008](docs/decisions/0008-bmad-adoption.md) | Selective BMAD-METHOD adoption: status rollup, trivial-change exception, epics, lesson | Accepted |
+| [0009](docs/decisions/0009-rename-to-ianua.md) | Rename the project: ANEW → Ianua | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).
@@ -193,7 +194,7 @@ The agent cannot pass locally and fail in CI by running different commands.
 
 **Tooling is law, concretely.** The installed adapters' PreToolUse hook won't let an agent touch
 `specs/done/` at all, or this workspace's own process files (`AGENTS.md`, `workflows/`, `prompts/`,
-`scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`) without `ANEW_ALLOW_CORE_EDIT=1` set
+`scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/`) without `IANUA_ALLOW_CORE_EDIT=1` set
 consciously for that session — so "don't edit the process files by accident" isn't a rule an agent
 has to remember, it's one it structurally can't break. See `docs/decisions/0005-core-file-lock.md`.
 
@@ -207,7 +208,7 @@ Everything is plain Markdown and POSIX shell — edit, don't fork the philosophy
 
 ## Origin
 
-ANEW distills the methodology behind the course *AI-Native Software Engineering* by
+Ianua distills the methodology behind the course *AI-Native Software Engineering* by
 [Engin Demiroğ](https://www.udemy.com/user/engindemirog/) — where the full discipline is taught by
 building a production system from an empty folder. The workspace is the system; the course is the
 mastery of it.

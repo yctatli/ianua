@@ -7,7 +7,7 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/policy.py\"",
-            "statusMessage": "ANEW policy check"
+            "statusMessage": "Ianua policy check"
           }
         ]
       },
@@ -17,7 +17,7 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/policy.py\"",
-            "statusMessage": "ANEW policy check"
+            "statusMessage": "Ianua policy check"
           }
         ]
       }

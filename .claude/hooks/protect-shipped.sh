@@ -4,7 +4,7 @@
 #  2) This workspace's own process files (AGENTS.md, workflows/, prompts/, scripts/, adapters/,
 #     docs/roles/, docs/decisions/, spec/plan templates, and the installed .claude/.codex/.agents/
 #     adapter copies) — immutable by default, editable only when the human consciously sets
-#     ANEW_ALLOW_CORE_EDIT=1 (bootstrap, a dedicated ADR, or deliberate framework maintenance).
+#     IANUA_ALLOW_CORE_EDIT=1 (bootstrap, a dedicated ADR, or deliberate framework maintenance).
 #     Never as a silent side effect of ordinary feature/bugfix work.
 #
 # Runs on Edit/Write (file_path) AND Bash (command text, heuristically — a courtesy layer, not a
@@ -14,7 +14,7 @@ file_path=$(printf '%s' "$input" | grep -o '"file_path"[[:space:]]*:[[:space:]]*
 command=$(printf '%s' "$input" | grep -o '"command"[[:space:]]*:[[:space:]]*"[^"]*"' | head -n 1 | sed 's/.*"command"[[:space:]]*:[[:space:]]*"//; s/"$//')
 
 SHIPPED_MSG="specs/done/ is immutable (shipped specs are the historical record — AGENTS.md rule 7). Behavior changing? Open a NEW spec in specs/active/ referencing the old one."
-CORE_MSG_PREFIX="is a workspace process file (AGENTS.md rule 7). These change only via bootstrap or a dedicated ADR — set ANEW_ALLOW_CORE_EDIT=1 to do this consciously, don't let it happen as a side effect of feature/bugfix work."
+CORE_MSG_PREFIX="is a workspace process file (AGENTS.md rule 7). These change only via bootstrap or a dedicated ADR — set IANUA_ALLOW_CORE_EDIT=1 to do this consciously, don't let it happen as a side effect of feature/bugfix work."
 
 block() { echo "Blocked: $1" >&2; exit 2; }
 
@@ -39,8 +39,8 @@ if [ -n "$command" ] && has_write_marker "$command"; then
   case "$command" in *specs/done/*) block "$SHIPPED_MSG" ;; esac
 fi
 
-# --- tier 2: workspace process files, override with ANEW_ALLOW_CORE_EDIT=1|true|yes ---
-case "${ANEW_ALLOW_CORE_EDIT:-}" in 1|true|yes) exit 0 ;; esac
+# --- tier 2: workspace process files, override with IANUA_ALLOW_CORE_EDIT=1|true|yes ---
+case "${IANUA_ALLOW_CORE_EDIT:-}" in 1|true|yes) exit 0 ;; esac
 
 if [ -n "$file_path" ] && is_core_path "$file_path"; then
   block "$file_path $CORE_MSG_PREFIX"

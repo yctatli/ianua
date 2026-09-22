@@ -7,7 +7,7 @@
 #  2) This workspace's own process files (AGENTS.md, workflows/, prompts/, scripts/, adapters/,
 #     docs/roles/, docs/decisions/, spec/plan templates, and the installed .claude/.codex/.agents/
 #     adapter copies) — immutable by default, editable only when the human consciously sets
-#     ANEW_ALLOW_CORE_EDIT=1 (bootstrap, a dedicated ADR, or deliberate framework maintenance).
+#     IANUA_ALLOW_CORE_EDIT=1 (bootstrap, a dedicated ADR, or deliberate framework maintenance).
 #     Never as a silent side effect of ordinary feature/bugfix work.
 #
 # This is a courtesy layer, not a security boundary — for a real boundary, run risky sessions
@@ -31,7 +31,7 @@ SHIPPED_MSG = (
 )
 CORE_MSG = (
     "this touches a workspace process file (AGENTS.md rule 7). These change only via bootstrap or "
-    "a dedicated ADR — set ANEW_ALLOW_CORE_EDIT=1 to do this consciously, don't let it happen as a "
+    "a dedicated ADR — set IANUA_ALLOW_CORE_EDIT=1 to do this consciously, don't let it happen as a "
     "side effect of feature/bugfix work."
 )
 
@@ -48,7 +48,7 @@ def deny(reason):
 
 
 def core_edit_allowed():
-    return os.environ.get("ANEW_ALLOW_CORE_EDIT", "").lower() in ("1", "true", "yes")
+    return os.environ.get("IANUA_ALLOW_CORE_EDIT", "").lower() in ("1", "true", "yes")
 
 
 def touches_core(text):

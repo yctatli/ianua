@@ -1,5 +1,5 @@
 #!/bin/sh
-# ANEW status — a derived rollup of specs/active/*.md and specs/epics/*.md.
+# Ianua status — a derived rollup of specs/active/*.md and specs/epics/*.md.
 # Never hand-maintained, never drifts: regenerated from the same files scripts/check and
 # scripts/doctor already treat as the source of truth. Informational only — always exits 0.
 set -u
@@ -10,7 +10,7 @@ EPICS="$ROOT/specs/epics"
 
 field() { grep -m1 "^- $1:" "$2" 2>/dev/null | sed "s/^- $1: *//"; }
 
-echo "== ANEW status =="
+echo "== Ianua status =="
 
 count=0
 for f in "$ACTIVE"/*.md; do
