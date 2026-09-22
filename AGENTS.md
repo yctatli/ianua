@@ -14,6 +14,12 @@ English unless stated otherwise). Until set, respond in whatever language the hu
 
 ## Invariant rules (these survive bootstrap — never delete or weaken them)
 
+*Nested install: if a `.ianua/` folder exists at this project's root, only `AGENTS.md`, `CLAUDE.md`,
+and `.claude/`/`.agents/`/`.codex/` are actually there — every other bare path below or in any
+workflow/prompt/command it points to (`workflows/x`, `docs/y`, `specs/z`, `prompts/w`,
+`scripts/check`, ...) lives under `.ianua/` instead. Resolve `workflows/x` as `.ianua/workflows/x`,
+etc., for every such path you hit — don't conclude you need to run from inside `.ianua/`.*
+
 1. **No spec, no code.** Every piece of work starts as a spec in `specs/active/` (from `specs/TEMPLATE.md`) — except the narrow trivial-change exception in `workflows/README.md`.
 2. **Plan before build.** A human approves the plan before any code is written.
 3. **The producer never verifies its own work.** Review and QA run in a separate session or a read-only subagent, working from files (diff + spec), never from the builder's chat.

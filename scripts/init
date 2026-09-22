@@ -55,10 +55,28 @@ case "$1" in
   claude-code)
     if [ "$NESTED" = 1 ]; then
       link "$ROOT/AGENTS.md" "$PROJECT_ROOT/AGENTS.md"
-      link "$ADAPTERS/claude-code/CLAUDE.md" "$PROJECT_ROOT/CLAUDE.md"
       link "$ADAPTERS/claude-code/.claude" "$PROJECT_ROOT/.claude"
+      # CLAUDE.md is written, not symlinked: it needs a nested-mode note appended, and it's the
+      # one file Claude Code auto-loads unconditionally every turn, so this is the most reliable
+      # place to teach the agent that bare Ianua paths (workflows/x, docs/y, ...) live under
+      # .ianua/ here, not at the project root.
+      if [ -e "$PROJECT_ROOT/CLAUDE.md" ] && [ ! -L "$PROJECT_ROOT/CLAUDE.md" ]; then
+        echo "SKIP: $PROJECT_ROOT/CLAUDE.md already exists and isn't managed by this script — remove it yourself if you want Ianua to manage it." >&2
+      else
+        rm -f "$PROJECT_ROOT/CLAUDE.md"
+        cat "$ADAPTERS/claude-code/CLAUDE.md" > "$PROJECT_ROOT/CLAUDE.md"
+        cat >> "$PROJECT_ROOT/CLAUDE.md" <<'EOF'
+
+**Nested install.** This project uses Ianua from a `.ianua/` folder (not copied to the root). Only
+`AGENTS.md`, `CLAUDE.md`, and `.claude/` are actually here — every other bare Ianua path any file
+mentions (`workflows/x`, `docs/y`, `specs/z`, `prompts/w`, `scripts/check`, ...) lives under
+`.ianua/` instead. Resolve `workflows/x` as `.ianua/workflows/x`, etc., for every such path you hit
+in AGENTS.md, workflows/, prompts/, or any `.claude/commands/`/`.claude/agents/` file — don't
+conclude you need to run from inside `.ianua/`.
+EOF
+      fi
       gitignore_note
-      echo "Installed (nested): AGENTS.md, CLAUDE.md, .claude/ — all symlinks into .ianua/."
+      echo "Installed (nested): AGENTS.md, .claude/ (symlinks into .ianua/), CLAUDE.md (generated)."
     else
       cp "$ADAPTERS/claude-code/CLAUDE.md" "$ROOT/CLAUDE.md"
       mkdir -p "$ROOT/.claude"
