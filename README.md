@@ -152,6 +152,65 @@ work is). Two small, narrow escape valves handle scope, in every mode:
   `specs/epics/` — a pointer, not a shortcut past any spec's own spine. See `workflows/README.md`,
   "Epics," and run `./scripts/status` for a rollup of everything in flight.
 
+## Workflows & commands
+
+One workflow runs per task — picked by **what the request actually is**, not by whether the code
+already exists (every workflow here works on an existing codebase; bootstrap already adapted the
+rules to it). An analyst, a developer, or a manager can all trigger any of these the same way —
+type the command, answer the questions it asks, approve or reject at the gates:
+
+| Task | When | Claude Code | Codex CLI | Spine |
+|---|---|---|---|---|
+| **Bootstrap** | Once per project (rerunnable to revise) | `/bootstrap` | `$bootstrap` | INSPECT → INTERVIEW → GENERATE → VERIFY → REPORT |
+| **Feature** | New behavior, or an improvement to something that already works | `/new-feature "..."` | `$new-feature "..."` | INTENT → CLARIFY → SPEC → PLAN → **[approval]** → BUILD → REVIEW → **[triage]** → VERIFY → SHIP |
+| **Bug fix** | Something is broken or behaving wrong | `/fix-bug "..."` | `$fix-bug "..."` | REPORT → REPRODUCE (red test first) → DIAGNOSE → FIX → PROVE → REVIEW → SHIP |
+| **Refactor** | Structure changes, behavior must stay provably identical | `/refactor "..."` | `$refactor "..."` | BASELINE → SCOPE & PLAN → **[approval]** → REFACTOR → PROVE UNCHANGED → REVIEW |
+| **Incident** | Production is on fire | no command — read `workflows/incident.md` directly | same | ASSESS → STABILIZE → **[human acts]** → EVIDENCE → ROOT CAUSE → FIX (runs the bug-fix workflow) → POSTMORTEM |
+| **Review** | Independent review of a change set against its spec | `/review` | `$review` | reads the diff + spec, reports findings with file:line evidence, or "clean" |
+| **Security** | Dedicated security pass, separate from review | `/security` | `$security` | same lens, security-focused (`docs/security.md`) — mandatory in strict mode, on demand in lite |
+| **Verify** | QA: map every acceptance criterion to evidence | `/verify` | `$verify` | criterion ↔ evidence table, before SHIP |
+| **ADR** | Discuss and record an architecture decision | `/adr "..."` | `$adr` | options with a recommendation → your decision → file written |
+| **Recover** | Something went wrong mid-process | `/recover "what happened"` | `$recover` | picks the matching ramp (R-01…R-13) from `prompts/recovery/` |
+
+A genuinely trivial, zero-behavior-change, single-file edit doesn't need any of this — see "Two
+operating modes" above. Everything else does.
+
+## Do the rules actually get enforced?
+
+Honestly: partly. `AGENTS.md` is auto-loaded every session (natively by Codex; via `CLAUDE.md` for
+Claude Code), so even a plain chat request — no slash command, no `$skill` — has the rules "in
+view" and a well-behaved agent tries to follow them. But "in view" isn't the same as "impossible to
+skip." Two different guarantees are at work here, and it matters which one you're relying on:
+
+**Mechanically enforced — no prompt gets around this:**
+- The core-file-lock hook blocks writes to `specs/done/`, `AGENTS.md`, `workflows/`, `prompts/`,
+  `scripts/`, `adapters/`, `docs/roles/`, `docs/decisions/` unless `IANUA_ALLOW_CORE_EDIT=1` is set
+  for that session — regardless of how the request is phrased.
+- Claude Code's `reviewer` and `security` subagents are **read-only by tool allowlist** (no
+  Edit/Write in their definition) — they cannot write a file even if asked to, not just told not
+  to. Codex CLI has no equivalent tool-level lock (see `adapters/codex/README.md`, "Independent
+  review, mechanically") — a genuine guarantee there needs a **separate Codex session** with
+  `sandbox_mode = "read-only"`.
+- Destructive git operations (force push, hard reset, `rm -rf`) are denied by permission config,
+  not by politeness.
+- `scripts/check` is a mechanical pass/fail gate — in CI, on every PR, independent of what happened
+  in chat.
+
+**Prose-level — the agent follows it because it's instructed to, not because it's blocked:**
+- "No spec, no code," plan approval, human gates in general — nothing technical stops an agent from
+  just editing application code if you ask it to directly and skip the workflow. It's *supposed* to
+  push back and ask for a spec first; a determined "just do it" can still get compliance, because
+  there's no hook gating application code the way there is for core files.
+- "Independent review" only becomes the hard guarantee above when you actually route through
+  `/review`/`$review` (or a separate session, on Codex) — ask the same session that wrote the
+  change to "review your own diff" and you get a self-review with full write access, not the
+  enforced-independent one.
+
+**Practical takeaway:** for a genuinely trivial change, free-form chat is fine — see "Two operating
+modes." For anything else, use the commands above; that's what actually routes you through the
+parts that are real guarantees (read-only subagents, model/effort routing, structured gates), not
+just requests the agent happens to honor.
+
 ## Monitoring progress
 
 There's no separate dashboard — visibility comes from the workflow files and the specs themselves,

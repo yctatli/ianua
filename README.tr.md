@@ -154,6 +154,65 @@ her modda ele alan iki küçük, dar kaçış valfi var:
   spec'in kendi omurgasının önüne geçen bir kısayol değil, bir pointer. `workflows/README.md`,
   "Epics" bölümüne bak; devam eden her şeyin özeti için `./scripts/status`'u çalıştır.
 
+## Workflow'lar & komutlar
+
+Görev başına bir workflow çalışır — hangisinin çalışacağı **talebin ne olduğuna** göre belirlenir,
+kodun zaten var olup olmamasına göre değil (buradaki her workflow mevcut bir kod tabanında da
+çalışır; bootstrap kuralları zaten ona uyarlamıştır). Analist, developer ya da yönetici — hepsi
+bunları aynı şekilde tetikleyebilir: komutu yaz, sorduğu soruları cevapla, kapılarda onayla/reddet:
+
+| Görev | Ne zaman | Claude Code | Codex CLI | Omurga |
+|---|---|---|---|---|
+| **Bootstrap** | Proje başına bir kez (revize için tekrar çalıştırılabilir) | `/bootstrap` | `$bootstrap` | INSPECT → INTERVIEW → GENERATE → VERIFY → REPORT |
+| **Feature** | Yeni davranış, ya da zaten çalışan bir şeye iyileştirme | `/new-feature "..."` | `$new-feature "..."` | INTENT → CLARIFY → SPEC → PLAN → **[onay]** → BUILD → REVIEW → **[triyaj]** → VERIFY → SHIP |
+| **Bug fix** | Bir şey bozuk ya da yanlış çalışıyor | `/fix-bug "..."` | `$fix-bug "..."` | REPORT → REPRODUCE (önce kırmızı test) → DIAGNOSE → FIX → PROVE → REVIEW → SHIP |
+| **Refactor** | Yapı değişiyor, davranış kanıtlanabilir şekilde aynı kalmalı | `/refactor "..."` | `$refactor "..."` | BASELINE → SCOPE & PLAN → **[onay]** → REFACTOR → PROVE UNCHANGED → REVIEW |
+| **Incident** | Production yanıyor | komut yok — doğrudan `workflows/incident.md`'yi oku | aynı | ASSESS → STABILIZE → **[insan aksiyon alır]** → EVIDENCE → ROOT CAUSE → FIX (bug-fix workflow'unu çalıştırır) → POSTMORTEM |
+| **Review** | Bir değişiklik setinin spec'ine karşı bağımsız incelemesi | `/review` | `$review` | diff + spec'i okur, bulguları file:line kanıtıyla raporlar, ya da "clean" |
+| **Security** | Review'dan ayrı, özel bir güvenlik geçişi | `/security` | `$security` | aynı bakış açısı, güvenlik odaklı (`docs/security.md`) — strict modda zorunlu, lite modda isteğe bağlı |
+| **Verify** | QA: her kabul kriterini bir kanıta eşle | `/verify` | `$verify` | SHIP'ten önce kriter ↔ kanıt tablosu |
+| **ADR** | Bir mimari kararı tartış ve kaydet | `/adr "..."` | `$adr` | öneriyle gelen seçenekler → senin kararın → dosya yazılır |
+| **Recover** | Süreç ortasında bir şey ters gitti | `/recover "ne oldu"` | `$recover` | `prompts/recovery/`'den eşleşen ramp'i (R-01…R-13) seçer |
+
+Gerçekten önemsiz, davranış değiştirmeyen, tek dosyalık bir değişiklik bunların hiçbirine ihtiyaç
+duymaz — yukarıdaki "İki çalışma modu"na bak. Geri kalan her şey ihtiyaç duyar.
+
+## Kurallar gerçekten uygulanıyor mu?
+
+Dürüstçe: kısmen. `AGENTS.md` her oturumda otomatik yükleniyor (Codex'te native olarak, Claude
+Code'da `CLAUDE.md` üzerinden) — yani düz bir sohbet isteğinde bile (slash command yok, `$skill`
+yok) kurallar "görüş alanında" ve iyi davranan bir ajan onlara uymaya çalışır. Ama "görüş alanında
+olmak" ile "atlanması imkânsız olmak" aynı şey değil. Burada iki farklı garanti var ve hangisine
+güvendiğin önemli:
+
+**Mekanik olarak uygulanan — hiçbir prompt bunu aşamaz:**
+- Core-file-lock hook'u `specs/done/`, `AGENTS.md`, `workflows/`, `prompts/`, `scripts/`,
+  `adapters/`, `docs/roles/`, `docs/decisions/`'a yazmayı engeller — o oturum için
+  `IANUA_ALLOW_CORE_EDIT=1` ayarlanmadıkça, istek nasıl ifade edilirse edilsin.
+- Claude Code'un `reviewer` ve `security` subagent'ları **tool allowlist ile salt-okunur**
+  (tanımlarında Edit/Write yok) — istense bile dosya yazamazlar, sadece "yazma" denmiş değil.
+  Codex CLI'da bunun tool-seviyesinde bir karşılığı yok (bkz. `adapters/codex/README.md`,
+  "Independent review, mechanically") — gerçek bir garanti için `sandbox_mode = "read-only"` ile
+  **ayrı bir Codex oturumu** gerekir.
+- Yıkıcı git işlemleri (force push, hard reset, `rm -rf`) nezaketle değil, izin konfigürasyonuyla
+  reddedilir.
+- `scripts/check`, CI'da her PR'da çalışan mekanik bir geç/kal kapısıdır — chat'te ne olduğundan
+  bağımsız.
+
+**Söz seviyesinde — ajan bunu, kendisine söylendiği için uyguluyor, engellendiği için değil:**
+- "Spec yoksa kod yok," plan onayı, genel olarak insan kapıları — bir ajanın, doğrudan istenirse ve
+  workflow atlanırsa uygulama koduna dokunmasını teknik olarak engelleyen hiçbir şey yok. *Normalde*
+  geri itip önce spec istemesi gerekir; ama kararlı bir "sadece yap" isteği yine de karşılık
+  bulabilir, çünkü core dosyalar için olan hook uygulama koduna uygulanmıyor.
+- "Bağımsız inceleme," yukarıdaki sert garantiye ancak gerçekten `/review`/`$review` üzerinden
+  (ya da Codex'te ayrı bir oturumla) geçtiğinde dönüşür — değişikliği yazan aynı oturuma "kendi
+  diff'ini incele" dersen, zorunlu-bağımsız olanı değil, tam yazma yetkili bir self-review alırsın.
+
+**Pratik özet:** gerçekten önemsiz bir değişiklik için serbest sohbet yeterli — bkz. "İki çalışma
+modu." Geri kalan her şey için yukarıdaki komutları kullan; gerçek garantiler (salt-okunur
+subagent'lar, model/effort routing, yapılandırılmış kapılar) sana ancak onlar üzerinden geliyor,
+ajanın uymayı tercih ettiği isteklerden değil.
+
 ## İlerlemeyi izleme
 
 Ayrı bir dashboard yok — görünürlük, açık tutman gereken bir arayüzden değil, workflow
