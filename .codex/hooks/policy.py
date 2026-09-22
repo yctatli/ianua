@@ -19,8 +19,9 @@ import sys
 
 CORE_PATTERNS = (
     "AGENTS.md", "CLAUDE.md", "workflows/", "prompts/", "scripts/check", "scripts/check.conf",
-    "scripts/doctor", "scripts/init", "adapters/", "docs/roles/", "docs/decisions/",
-    "specs/TEMPLATE.md", "specs/plans/TEMPLATE.md", ".claude/", ".codex/", ".agents/",
+    "scripts/doctor", "scripts/init", "scripts/status", "adapters/", "docs/roles/",
+    "docs/decisions/", "specs/TEMPLATE.md", "specs/plans/TEMPLATE.md", "specs/epics/TEMPLATE.md",
+    ".claude/", ".codex/", ".agents/",
 )
 WRITE_MARKERS = (">", ">>", "rm ", "mv ", "cp ", "sed -i", "tee ", "git mv", "git rm")
 

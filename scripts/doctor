@@ -17,13 +17,13 @@ for f in \
   docs/architecture.md docs/domain.md docs/conventions.md docs/testing.md docs/security.md docs/git.md \
   docs/decisions/TEMPLATE.md docs/roles/README.md docs/roles/analyst.md docs/roles/developer.md \
   docs/roles/reviewer.md docs/roles/security.md docs/roles/qa.md \
-  specs/TEMPLATE.md specs/plans/TEMPLATE.md \
+  specs/TEMPLATE.md specs/plans/TEMPLATE.md specs/epics/README.md specs/epics/TEMPLATE.md \
   workflows/README.md workflows/bootstrap.md workflows/feature-development.md workflows/bug-fix.md \
   workflows/refactor.md workflows/incident.md \
   prompts/README.md prompts/bootstrap.md prompts/clarify.md prompts/spec.md prompts/plan.md \
   prompts/build.md prompts/review.md prompts/security-review.md prompts/verify.md prompts/adr.md \
   prompts/recovery/README.md \
-  scripts/check
+  scripts/check scripts/status
 do
   if [ -f "$ROOT/$f" ]; then :; else fail "missing: $f"; fi
 done

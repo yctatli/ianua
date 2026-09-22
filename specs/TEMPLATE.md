@@ -3,6 +3,7 @@
 - Status: Draft | Approved | In progress | Shipped
 - Mode: lite | strict (from AGENTS.md at creation time)
 - Plan: `specs/plans/NNNN-plan.md`
+- Epic: `specs/epics/NNNN-<name>.md` (optional — only if this is one of several specs toward one shared outcome)
 
 ## Intent
 <!-- 3–5 sentences, BUSINESS language: who wants this and why; what success looks like;
@@ -38,3 +39,9 @@ what is deliberately NOT being done. Decisions from clarifying questions are fol
 | Review findings: real / noise | |
 | Regressions introduced | |
 | Bugs escaped to production | |
+
+## Lesson (only if the scorecard shows real friction)
+<!-- Spec revisions > 1, fix rounds > 2, or a real finding that shouldn't have made it past BUILD?
+Name ONE concrete thing that would have prevented it — a new test category (docs/testing.md), a
+new docs/conventions.md rule, or an ADR. Clean numbers → skip this section entirely; it exists to
+close a real gap, not to manufacture ceremony for work that went fine. -->

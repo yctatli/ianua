@@ -87,6 +87,15 @@ Chosen at bootstrap, recorded in `AGENTS.md`, honored by every workflow:
 Running the full process on every project is unnecessary cost; running none is uncontrolled risk.
 Pick per project — or per feature.
 
+Mode is about **ceremony** (how many gates); it's orthogonal to **scope** (how big the unit of
+work is). Two small, narrow escape valves handle scope, in every mode:
+- A genuinely trivial, zero-behavior-change, single-file edit can skip the spec entirely —
+  `workflows/README.md`, "Trivial changes." The bar is intentionally high; default to writing the
+  spec when in doubt.
+- Several specs that only make sense together as one outcome can be grouped under
+  `specs/epics/` — a pointer, not a shortcut past any spec's own spine. See `workflows/README.md`,
+  "Epics," and run `./scripts/status` for a rollup of everything in flight.
+
 ## What's in the box
 
 | Path | Purpose |
@@ -95,12 +104,13 @@ Pick per project — or per feature.
 | `docs/` | Long-term memory: architecture, domain language, conventions, testing, security, git rules — templates filled at bootstrap, evolve with features (not locked). |
 | `docs/decisions/` | ADRs — decisions with rationale, numbered and superseded rather than edited. See "Decisions log" below. |
 | `docs/roles/` | Role cards bound to responsibility, not technology: Analyst, Developer, Reviewer, **Security**, QA. Producer and verifier are never the same session. See "Roles" below. |
-| `specs/` | One spec per piece of work: intent, behavior, testable acceptance criteria. `active/` → `done/` (immutable once shipped, no override). Plans live in `specs/plans/`. |
+| `specs/` | One spec per piece of work: intent, behavior, testable acceptance criteria. `active/` → `done/` (immutable once shipped, no override). Plans live in `specs/plans/`; specs that share one outcome can be grouped in `specs/epics/`. |
 | `workflows/` | The processes: bootstrap, feature-development, bug-fix, refactor, incident. Exactly one runs per task, matched to what it is — never all of them at once. Each step points to its prompt. |
 | `prompts/` | Reusable prompt bodies with placeholders. `prompts/recovery/` is the catalog of safe ramps (R-01…R-13) for when things go wrong. |
 | `adapters/` | Per-tool wiring. `scripts/init <tool>` installs one. Claude Code and Codex CLI adapters both include model/effort routing and a security-role subagent/skill — see each adapter's own README. |
 | `scripts/check` | The single verification contract: humans, agents, hooks, and CI all run this one command. Stack-specific internals (including a `security:` step) live in `check.conf`, written at bootstrap. |
 | `scripts/doctor` | Workspace health: structure, configuration state, adapter presence. |
+| `scripts/status` | A derived rollup of every spec in `specs/active/` (status, mode, DoD progress, security-dimension state) and any epics — nothing hand-maintained, regenerated from the same files every time. |
 | `.github/` | CI that runs the same `scripts/check` + a PR template mirroring the gates. |
 
 ## Roles
@@ -136,6 +146,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0005](docs/decisions/0005-core-file-lock.md) | Core-file-lock: protect this workspace's own process files during dev | Accepted |
 | [0006](docs/decisions/0006-security-severity-gating.md) | Security finding severity taxonomy (Critical/High/Medium/Low) + ship-gating | Accepted |
 | [0007](docs/decisions/0007-test-standards.md) | Test standards: risk-tiered levels, mandatory categories, named anti-patterns | Accepted |
+| [0008](docs/decisions/0008-bmad-adoption.md) | Selective BMAD-METHOD adoption: status rollup, trivial-change exception, epics, lesson | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).

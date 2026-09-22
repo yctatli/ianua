@@ -11,7 +11,7 @@ Every workflow honors the gates of the current mode.
 
 ## Invariant rules (these survive bootstrap — never delete or weaken them)
 
-1. **No spec, no code.** Every piece of work starts as a spec in `specs/active/` (from `specs/TEMPLATE.md`).
+1. **No spec, no code.** Every piece of work starts as a spec in `specs/active/` (from `specs/TEMPLATE.md`) — except the narrow trivial-change exception in `workflows/README.md`.
 2. **Plan before build.** A human approves the plan before any code is written.
 3. **The producer never verifies its own work.** Review and QA run in a separate session or a read-only subagent, working from files (diff + spec), never from the builder's chat.
 4. **Evidence over claims.** "Done" requires `scripts/check` green and every acceptance criterion mapped to proof. Never claim completion without showing evidence.

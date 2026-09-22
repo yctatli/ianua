@@ -17,4 +17,4 @@ INTENT → CLARIFY → SPEC → PLAN → [APPROVAL] → BUILD → REVIEW → [TR
 | 7 | **TRIAGE** | Human | — | **[GATE: human]** Each finding: real (fix) / noise (reject, write why) / investigate (→ QA, R-05). Security: Critical/High cannot close as noise (`docs/security.md`, "Severity & gating") — fix, or a dedicated risk-acceptance ADR. Critical → R-13. |
 | 8 | **FIX ROUNDS** | Developer | `prompts/build.md` §fixes | Only real findings. Re-review the fix diff (step 6, narrow scope). Rounds > 3 → R-06. |
 | 9 | **VERIFY** | QA | `prompts/verify.md` | Criterion ↔ evidence table complete. UI criteria: screenshot = evidence. |
-| 10 | **SHIP** | Human | — | **[GATE: human]** DoD checklist in spec all green → PR (template) → merge → move spec to `specs/done/` → fill scorecard. |
+| 10 | **SHIP** | Human | — | **[GATE: human]** DoD checklist in spec all green → PR (template) → merge → move spec to `specs/done/` → fill scorecard, and the Lesson section if the numbers show real friction (spec's own template). |

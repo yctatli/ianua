@@ -1,0 +1,69 @@
+#!/bin/sh
+# ANEW status — a derived rollup of specs/active/*.md and specs/epics/*.md.
+# Never hand-maintained, never drifts: regenerated from the same files scripts/check and
+# scripts/doctor already treat as the source of truth. Informational only — always exits 0.
+set -u
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+ACTIVE="$ROOT/specs/active"
+PLANS="$ROOT/specs/plans"
+EPICS="$ROOT/specs/epics"
+
+field() { grep -m1 "^- $1:" "$2" 2>/dev/null | sed "s/^- $1: *//"; }
+
+echo "== ANEW status =="
+
+count=0
+for f in "$ACTIVE"/*.md; do
+  [ -f "$f" ] || continue
+  base=$(basename "$f")
+  case "$base" in README.md|TEMPLATE.md) continue ;; esac
+  count=$((count + 1))
+
+  name=$(head -n 1 "$f" | sed 's/^# *//')
+  status=$(field Status "$f")
+  mode=$(field Mode "$f")
+  epic=$(field Epic "$f")
+
+  dod_total=$(grep -c '^- \[[ xX]\]' "$f")
+  dod_done=$(grep -c '^- \[[xX]\]' "$f")
+
+  num=$(echo "$base" | grep -o '^[0-9]\{4\}')
+  plan="$PLANS/${num}-plan.md"
+  if [ -f "$plan" ]; then plan_status=$(field Status "$plan"); [ -n "$plan_status" ] || plan_status="(no status line)"
+  else plan_status="none yet"
+  fi
+
+  sec_line=$(grep -m1 'Security dimension of review' "$f" || true)
+  case "$sec_line" in
+    '- [x]'*|'- [X]'*) sec="addressed" ;;
+    '- [ ]'*) sec="OPEN" ;;
+    *) sec="n/a" ;;
+  esac
+
+  echo ""
+  echo "$base — ${name:-?}"
+  echo "  status: ${status:-?}  ·  mode: ${mode:-?}  ·  plan: $plan_status"
+  echo "  DoD: $dod_done/$dod_total checked  ·  security: $sec"
+  [ -n "$epic" ] && [ "$epic" != "" ] && echo "  epic: $epic"
+done
+
+if [ "$count" -eq 0 ]; then
+  echo "(no specs in specs/active/ — nothing in flight)"
+else
+  echo ""
+  echo "== $count spec(s) in flight =="
+fi
+
+ecount=0
+for e in "$EPICS"/*.md; do
+  [ -f "$e" ] || continue
+  base=$(basename "$e")
+  case "$base" in README.md|TEMPLATE.md) continue ;; esac
+  ecount=$((ecount + 1))
+  [ "$ecount" -eq 1 ] && { echo ""; echo "== epics =="; }
+  name=$(head -n 1 "$e" | sed 's/^# *//')
+  status=$(field Status "$e")
+  echo "$base — ${name:-?} (${status:-?})"
+done
+
+exit 0

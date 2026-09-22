@@ -21,4 +21,5 @@ REPORT → REPRODUCE (red test) → DIAGNOSE → FIX → PROVE → REVIEW → SH
    auth/input/data handling: also a separate Security pass (`docs/roles/security.md`).
    **[GATE: human — strict]** triage.
 7. **SHIP.** Small bugs: PR referencing the report. Behavior-changing fixes: they're features —
-   write a mini-spec first.
+   write a mini-spec first. If this fix has a spec (mini or full), fill its Scorecard and — if the
+   numbers show real friction — its Lesson section too.
