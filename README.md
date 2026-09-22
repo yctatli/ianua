@@ -1,13 +1,60 @@
 # Ianua — AI Native Engineering Workspace
 
+*Bu belge Türkçe de mevcut: [README.tr.md](README.tr.md)*
+
 **A general-purpose, technology-agnostic bootstrap for building software with AI — under control.**
 
 > It doesn't matter what you're building. Ianua gives you a starting environment where context,
 > decisions, specs, roles, quality gates, and verification are managed in files — not lost in chat.
 
-Use this repo as a GitHub template (or drop it into an existing project), install the adapter for
-your AI tool, run the bootstrap workflow, and start your first feature. No frameworks, no
-dependencies, no code generators — a working *system*, written in Markdown plus two small scripts.
+Use this repo as a GitHub template for a new project, or clone it into `.ianua/` inside a project
+you already have, install the adapter for your AI tool, run the bootstrap workflow, and start your
+first feature. No frameworks, no dependencies, no code generators — a working *system*, written in
+Markdown plus a handful of small scripts.
+
+## Using this in a project you already have
+
+New project → use this repo as a GitHub template; Ianua *is* the repo, nothing nests. Existing
+project → clone Ianua into a `.ianua/` folder instead of spreading its files across your repo root:
+
+```bash
+cd your-existing-project
+git clone https://github.com/yctatli/ianua.git .ianua
+rm -rf .ianua/.git                # you're not vendoring Ianua's own history into yours
+echo ".ianua" >> .gitignore       # scripts/init also does this for you if you skip it
+
+./.ianua/scripts/init claude-code # or: codex | github-copilot | cursor | generic
+export IANUA_ALLOW_CORE_EDIT=1    # bootstrap needs to write AGENTS.md — see "Design principles"
+# open your AI tool here and run /bootstrap (Claude Code) or the bootstrap skill (Codex)
+```
+
+`scripts/init` auto-detects that it's running from inside a folder literally named `.ianua` and
+switches to **nested mode**: instead of copying files into your repo root, it symlinks just what
+your AI tool needs to discover Ianua there — `AGENTS.md`, `CLAUDE.md`, `.claude/` (Claude Code),
+`.agents/` + `.codex/` (Codex CLI), etc. — each one a pointer, not a copy. Everything real
+(`docs/`, `specs/`, `workflows/`, `prompts/`, `scripts/`, `adapters/`) stays inside `.ianua/`, which
+you `git pull` to update the same way you'd update any tool. Nothing it creates outside `.ianua/`
+carries real content, so all of it is meant to be gitignored — `scripts/init` adds the one line
+that matters (`.ianua`) automatically; the handful of symlinks it drops at your root are covered by
+most teams' existing "don't track AI tool config" gitignore rules (`.claude/`, `CLAUDE.md`,
+`AGENTS.md`, `.codex/`, `.agents/` — add them if you don't already ignore these).
+
+```mermaid
+flowchart LR
+    subgraph root["your project root"]
+        direction TB
+        A["AGENTS.md"] -.symlink.-> C
+        B["CLAUDE.md / .claude/"] -.symlink.-> C
+        Code["your actual code — untouched"]
+        subgraph C["📁 .ianua/  (gitignored clone, the only real content)"]
+            direction LR
+            D["docs/ · specs/ · workflows/<br/>prompts/ · scripts/ · adapters/"]
+        end
+    end
+```
+
+Re-running `./.ianua/scripts/init <adapter>` after a `git pull` inside `.ianua/` needs nothing
+else — the symlinks already point at the current content.
 
 ## Why this exists
 
@@ -36,8 +83,10 @@ Every file in Ianua connects to one of these channels — plus one more thing pr
 ## Quickstart
 
 ```bash
-# 1. Use this template on GitHub (or copy the files into an existing repo), then:
+# 1. New project: use this repo as a GitHub template.
+#    Existing project: clone into .ianua/ first — see "Using this in a project you already have".
 ./scripts/init claude-code        # or: codex | github-copilot | cursor | generic
+#    (nested install: ./.ianua/scripts/init claude-code — same command, auto-detected)
 
 # 2. Bootstrap writes AGENTS.md / scripts/check.conf / adapter files, all protected by the
 #    core-file-lock hook (see "Design principles") — allow it for this session first:
@@ -66,9 +115,16 @@ and adapts the rules to what's already there).
 
 Every piece of work runs through a workflow, and every workflow enforces the same spine:
 
-```
-INTENT → CLARIFY → SPEC → PLAN → [HUMAN APPROVAL] → BUILD
-       → INDEPENDENT REVIEW → [HUMAN TRIAGE] → VERIFY → SHIP
+```mermaid
+flowchart LR
+    Intent([INTENT]) --> Clarify([CLARIFY]) --> Spec([SPEC]) --> Plan([PLAN])
+    Plan --> Gate1{{"HUMAN\napproval"}}
+    Gate1 --> Build([BUILD]) --> Review([INDEPENDENT\nREVIEW])
+    Review --> Gate2{{"HUMAN\ntriage"}}
+    Gate2 --> Verify([VERIFY]) --> Ship([SHIP])
+
+    classDef gate fill:#f9d976,stroke:#333,color:#111;
+    class Gate1,Gate2 gate;
 ```
 
 Two human checkpoints are never automated: **plan approval** and **finding triage**.
@@ -97,6 +153,9 @@ work is). Two small, narrow escape valves handle scope, in every mode:
   "Epics," and run `./scripts/status` for a rollup of everything in flight.
 
 ## What's in the box
+
+Paths below are relative to wherever Ianua's core actually lives: the repo root in a template
+install, `.ianua/` in a nested one (see "Using this in a project you already have").
 
 | Path | Purpose |
 |---|---|
@@ -148,6 +207,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0007](docs/decisions/0007-test-standards.md) | Test standards: risk-tiered levels, mandatory categories, named anti-patterns | Accepted |
 | [0008](docs/decisions/0008-bmad-adoption.md) | Selective BMAD-METHOD adoption: status rollup, trivial-change exception, epics, lesson | Accepted |
 | [0009](docs/decisions/0009-rename-to-ianua.md) | Rename the project: ANEW → Ianua | Accepted |
+| [0010](docs/decisions/0010-nested-install.md) | Nested install: `.ianua/` as a symlinked clone for existing repos | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).
@@ -205,13 +265,6 @@ Everything is plain Markdown and POSIX shell — edit, don't fork the philosophy
 - Gates too heavy? Switch the mode line in `AGENTS.md` to `lite`, or tailor workflows per project.
 - Tool not listed? Copy `adapters/generic/` and wire your own; core never changes.
 - Want stack presets? That's the packs layer — coming after v1 proves the core.
-
-## Origin
-
-Ianua distills the methodology behind the course *AI-Native Software Engineering* by
-[Engin Demiroğ](https://www.udemy.com/user/engindemirog/) — where the full discipline is taught by
-building a production system from an empty folder. The workspace is the system; the course is the
-mastery of it.
 
 ## License
 

@@ -1,9 +1,23 @@
 #!/bin/sh
-# Ianua init — installs an AI tool adapter into the repo root.
+# Ianua init — installs an AI tool adapter.
 # Usage: ./scripts/init [claude-code|github-copilot|cursor|generic]
+#
+# Nested mode: if this script lives at <project>/.ianua/scripts/init (i.e. the Ianua core was
+# cloned into a ".ianua" folder inside an existing repo instead of *being* the repo root), the
+# adapter's discovery files (AGENTS.md, CLAUDE.md, .claude/, .agents/, .codex/, .cursor/,
+# .github/copilot-instructions.md — whatever a given tool needs at the project root to find it)
+# are symlinked from the project root into .ianua/, instead of copied. Nothing is duplicated:
+# .ianua/ stays the single source of truth, the project root only gets pointers into it, and
+# re-running this script after `git pull`-ing .ianua/ needs no re-copy. Everything scripts/init
+# places outside .ianua/ is meant to be gitignored — see the note this prints in nested mode.
 set -e
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 ADAPTERS="$ROOT/adapters"
+
+case "$(basename "$ROOT")" in
+  .ianua) NESTED=1; PROJECT_ROOT=$(CDPATH= cd -- "$ROOT/.." && pwd) ;;
+  *)      NESTED=0; PROJECT_ROOT="$ROOT" ;;
+esac
 
 usage() {
   echo "Usage: ./scripts/init <adapter>"
@@ -18,32 +32,81 @@ usage() {
 
 [ $# -eq 1 ] || { usage; exit 1; }
 
+# link SRC (absolute, inside .ianua/) DEST (absolute, at PROJECT_ROOT) — nested mode only.
+link() {
+  src="$1"; dest="$2"
+  if [ -e "$dest" ] && [ ! -L "$dest" ]; then
+    echo "SKIP: $dest already exists and isn't a symlink — remove it yourself if you want Ianua to manage it." >&2
+    return
+  fi
+  rm -f "$dest"
+  ln -s "$src" "$dest"
+}
+
+gitignore_note() {
+  gi="$PROJECT_ROOT/.gitignore"
+  [ -f "$gi" ] || return
+  grep -qxF ".ianua" "$gi" 2>/dev/null && return
+  { echo ""; echo "# Ianua (nested install — see .ianua/README.md)"; echo ".ianua"; } >> "$gi"
+  echo "Added .ianua to .gitignore."
+}
+
 case "$1" in
   claude-code)
-    cp "$ADAPTERS/claude-code/CLAUDE.md" "$ROOT/CLAUDE.md"
-    mkdir -p "$ROOT/.claude"
-    cp -R "$ADAPTERS/claude-code/.claude/." "$ROOT/.claude/"
-    chmod +x "$ROOT/.claude/hooks/"*.sh 2>/dev/null || true
-    echo "Installed: CLAUDE.md, .claude/ (commands, agents, hooks, settings)."
+    if [ "$NESTED" = 1 ]; then
+      link "$ROOT/AGENTS.md" "$PROJECT_ROOT/AGENTS.md"
+      link "$ADAPTERS/claude-code/CLAUDE.md" "$PROJECT_ROOT/CLAUDE.md"
+      link "$ADAPTERS/claude-code/.claude" "$PROJECT_ROOT/.claude"
+      gitignore_note
+      echo "Installed (nested): AGENTS.md, CLAUDE.md, .claude/ — all symlinks into .ianua/."
+    else
+      cp "$ADAPTERS/claude-code/CLAUDE.md" "$ROOT/CLAUDE.md"
+      mkdir -p "$ROOT/.claude"
+      cp -R "$ADAPTERS/claude-code/.claude/." "$ROOT/.claude/"
+      chmod +x "$ROOT/.claude/hooks/"*.sh 2>/dev/null || true
+      echo "Installed: CLAUDE.md, .claude/ (commands, agents, hooks, settings)."
+    fi
     echo "Next: open Claude Code here and run /bootstrap"
     ;;
   codex)
-    mkdir -p "$ROOT/.agents/skills" "$ROOT/.codex/hooks"
-    cp -R "$ADAPTERS/codex/.agents/skills/." "$ROOT/.agents/skills/"
-    cp -R "$ADAPTERS/codex/.codex/." "$ROOT/.codex/"
-    echo "Installed: .agents/skills/ (workflow skills), .codex/hooks.json + .codex/hooks/ (policy hook), .codex/config.toml."
+    if [ "$NESTED" = 1 ]; then
+      link "$ROOT/AGENTS.md" "$PROJECT_ROOT/AGENTS.md"
+      link "$ADAPTERS/codex/.agents" "$PROJECT_ROOT/.agents"
+      link "$ADAPTERS/codex/.codex" "$PROJECT_ROOT/.codex"
+      gitignore_note
+      echo "Installed (nested): AGENTS.md, .agents/, .codex/ — all symlinks into .ianua/."
+    else
+      mkdir -p "$ROOT/.agents/skills" "$ROOT/.codex/hooks"
+      cp -R "$ADAPTERS/codex/.agents/skills/." "$ROOT/.agents/skills/"
+      cp -R "$ADAPTERS/codex/.codex/." "$ROOT/.codex/"
+      echo "Installed: .agents/skills/ (workflow skills), .codex/hooks.json + .codex/hooks/ (policy hook), .codex/config.toml."
+    fi
     echo "Next: run 'codex' once in this repo and trust it (see adapters/codex/README.md), then invoke the bootstrap skill."
     ;;
   github-copilot)
-    mkdir -p "$ROOT/.github"
-    cp "$ADAPTERS/github-copilot/copilot-instructions.md" "$ROOT/.github/copilot-instructions.md"
-    echo "Installed: .github/copilot-instructions.md."
+    if [ "$NESTED" = 1 ]; then
+      mkdir -p "$PROJECT_ROOT/.github"
+      link "$ADAPTERS/github-copilot/copilot-instructions.md" "$PROJECT_ROOT/.github/copilot-instructions.md"
+      gitignore_note
+      echo "Installed (nested): .github/copilot-instructions.md — symlink into .ianua/."
+    else
+      mkdir -p "$ROOT/.github"
+      cp "$ADAPTERS/github-copilot/copilot-instructions.md" "$ROOT/.github/copilot-instructions.md"
+      echo "Installed: .github/copilot-instructions.md."
+    fi
     echo "Next: open Copilot chat and paste prompts/bootstrap.md"
     ;;
   cursor)
-    mkdir -p "$ROOT/.cursor/rules"
-    cp "$ADAPTERS/cursor/rules/ianua.mdc" "$ROOT/.cursor/rules/ianua.mdc"
-    echo "Installed: .cursor/rules/ianua.mdc."
+    if [ "$NESTED" = 1 ]; then
+      mkdir -p "$PROJECT_ROOT/.cursor/rules"
+      link "$ADAPTERS/cursor/rules/ianua.mdc" "$PROJECT_ROOT/.cursor/rules/ianua.mdc"
+      gitignore_note
+      echo "Installed (nested): .cursor/rules/ianua.mdc — symlink into .ianua/."
+    else
+      mkdir -p "$ROOT/.cursor/rules"
+      cp "$ADAPTERS/cursor/rules/ianua.mdc" "$ROOT/.cursor/rules/ianua.mdc"
+      echo "Installed: .cursor/rules/ianua.mdc."
+    fi
     echo "Next: open Cursor here and paste prompts/bootstrap.md"
     ;;
   generic)

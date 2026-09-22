@@ -27,7 +27,8 @@ has_write_marker() {
 
 is_core_path() {
   case "$1" in
-    AGENTS.md|CLAUDE.md|workflows/*|prompts/*|scripts/check|scripts/check.conf|scripts/doctor|scripts/init|scripts/status|adapters/*|docs/roles/*|docs/decisions/*|specs/TEMPLATE.md|specs/plans/TEMPLATE.md|specs/epics/TEMPLATE.md|.claude/*|.codex/*|.agents/*)
+    AGENTS.md|CLAUDE.md|workflows/*|prompts/*|scripts/check|scripts/check.conf|scripts/doctor|scripts/init|scripts/status|adapters/*|docs/roles/*|docs/decisions/*|specs/TEMPLATE.md|specs/plans/TEMPLATE.md|specs/epics/TEMPLATE.md|.claude/*|.codex/*|.agents/*| \
+    .ianua/AGENTS.md|.ianua/CLAUDE.md|.ianua/workflows/*|.ianua/prompts/*|.ianua/scripts/check|.ianua/scripts/check.conf|.ianua/scripts/doctor|.ianua/scripts/init|.ianua/scripts/status|.ianua/adapters/*|.ianua/docs/roles/*|.ianua/docs/decisions/*|.ianua/specs/TEMPLATE.md|.ianua/specs/plans/TEMPLATE.md|.ianua/specs/epics/TEMPLATE.md)
       return 0 ;;
     *) return 1 ;;
   esac
@@ -47,7 +48,8 @@ if [ -n "$file_path" ] && is_core_path "$file_path"; then
 fi
 
 if [ -n "$command" ] && has_write_marker "$command"; then
-  for pat in AGENTS.md CLAUDE.md workflows/ prompts/ scripts/check scripts/doctor scripts/init scripts/status adapters/ docs/roles/ docs/decisions/ specs/TEMPLATE.md specs/plans/TEMPLATE.md specs/epics/TEMPLATE.md .claude/ .codex/ .agents/; do
+  for pat in AGENTS.md CLAUDE.md workflows/ prompts/ scripts/check scripts/doctor scripts/init scripts/status adapters/ docs/roles/ docs/decisions/ specs/TEMPLATE.md specs/plans/TEMPLATE.md specs/epics/TEMPLATE.md .claude/ .codex/ .agents/ \
+             .ianua/AGENTS.md .ianua/CLAUDE.md .ianua/workflows/ .ianua/prompts/ .ianua/scripts/check .ianua/scripts/doctor .ianua/scripts/init .ianua/scripts/status .ianua/adapters/ .ianua/docs/roles/ .ianua/docs/decisions/ .ianua/specs/TEMPLATE.md .ianua/specs/plans/TEMPLATE.md .ianua/specs/epics/TEMPLATE.md; do
     case "$command" in
       *"$pat"*) block "this command touches $pat, which $CORE_MSG_PREFIX" ;;
     esac

@@ -2,6 +2,13 @@
 # Ianua doctor — workspace health check. Structure, configuration state, adapter presence.
 # Exit 0 = healthy (warnings allowed), exit 1 = broken structure.
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+# Nested install (.ianua/ cloned inside an existing repo): adapter files (CLAUDE.md, .claude/,
+# .agents/, .codex/, .cursor/, .github/copilot-instructions.md) are symlinked at the project root,
+# one level up from .ianua/ — check for them there, not inside .ianua/ itself.
+case "$(basename "$ROOT")" in
+  .ianua) EXEC_ROOT=$(CDPATH= cd -- "$ROOT/.." && pwd) ;;
+  *)      EXEC_ROOT="$ROOT" ;;
+esac
 fails=0
 warns=0
 
@@ -64,17 +71,17 @@ else
 fi
 
 # --- adapter presence ---
-if [ -f "$ROOT/CLAUDE.md" ] || [ -f "$ROOT/.github/copilot-instructions.md" ] || [ -d "$ROOT/.cursor/rules" ] \
-   || [ -d "$ROOT/.agents/skills" ] || [ -f "$ROOT/.codex/hooks.json" ]; then
+if [ -f "$EXEC_ROOT/CLAUDE.md" ] || [ -f "$EXEC_ROOT/.github/copilot-instructions.md" ] || [ -d "$EXEC_ROOT/.cursor/rules" ] \
+   || [ -d "$EXEC_ROOT/.agents/skills" ] || [ -f "$EXEC_ROOT/.codex/hooks.json" ]; then
   ok "an AI tool adapter is installed"
 else
   warn "no adapter installed — run ./scripts/init <claude-code|github-copilot|cursor|generic>"
 fi
 
 # --- hygiene ---
-if [ -d "$ROOT/.claude/hooks" ]; then
-  for h in "$ROOT/.claude/hooks/"*.sh; do
-    [ -f "$h" ] && [ ! -x "$h" ] && warn "hook not executable: ${h#"$ROOT"/} (chmod +x it)"
+if [ -d "$EXEC_ROOT/.claude/hooks" ]; then
+  for h in "$EXEC_ROOT/.claude/hooks/"*.sh; do
+    [ -f "$h" ] && [ ! -x "$h" ] && warn "hook not executable: ${h#"$EXEC_ROOT"/} (chmod +x it)"
   done
 fi
 
