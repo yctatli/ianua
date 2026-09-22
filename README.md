@@ -135,6 +135,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0004](docs/decisions/0004-dedicated-security-role.md) | Dedicated Security role, mode-graduated (reverses one call in 0003) | Accepted |
 | [0005](docs/decisions/0005-core-file-lock.md) | Core-file-lock: protect this workspace's own process files during dev | Accepted |
 | [0006](docs/decisions/0006-security-severity-gating.md) | Security finding severity taxonomy (Critical/High/Medium/Low) + ship-gating | Accepted |
+| [0007](docs/decisions/0007-test-standards.md) | Test standards: risk-tiered levels, mandatory categories, named anti-patterns | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).

@@ -14,7 +14,9 @@
 <!-- Each with YOUR recommendation and rationale (proposal rule). Unresolved questions block build. -->
 
 ## Criterion ↔ test map
-| Acceptance criterion | Proven by |
-|---|---|
-| AC-1 | |
-| AC-2 | |
+<!-- Level: Unit | Integration | E2E — see docs/testing.md "Test level by risk". This is a plan-time
+call (judgment), not something the test-writing pass decides for itself. -->
+| Acceptance criterion | Level | Proven by |
+|---|---|---|
+| AC-1 | | |
+| AC-2 | | |

@@ -67,3 +67,27 @@ change top-level effort mid-session if you're relying on prompt caching for a lo
 subagent conversation (it invalidates the cached prefix) — these subagents are short-lived
 one-shots per invocation, so that mostly doesn't bite here, but it's the reason the "bump to
 xhigh/high" suggestions above are framed as a deliberate one-turn call, not a standing change.
+
+## Recovery ramp ownership
+
+`prompts/recovery/README.md` lists all 13 ramps tool-agnostically; this is which subagent should
+run each one here, so "who handles this" isn't reinvented per incident. Judgment-flavored ramps go
+to `planner`; mechanical/technical ones stay with `builder`; QA-flavored ones run under `builder`
+assuming the QA role (same as `/verify`, since there's no dedicated QA subagent — QA's job is
+evidence-auditing, not a distinct model tier from `builder`'s).
+
+| Ramp | Owner | Why |
+|---|---|---|
+| R-01 Compile/runtime error | `planner` | Diagnosis is the judgment call; the fix itself may hand off to `builder` |
+| R-02 Red test | `planner` | "Is code, test, or spec wrong" is a judgment call, not something to decide mid-implementation — don't let `builder` talk itself into "the test must be wrong" |
+| R-03 Flaky test | `builder` | Finding the nondeterminism source (timing/ordering/state/I-O) is technical execution, not a judgment call about correct behavior |
+| R-04 Regression | `planner` (diagnose narrower fix) → `builder` (revert + fix) → `test-writer` (permanent regression test) | Spans all three by design — don't run it in one subagent end to end |
+| R-05 Investigate finding | `builder` (as QA) | QA's reproduction work — same tier `/verify` already uses |
+| R-06 Fix-loop-limit exceeded | `planner` | "Analysis only, no code" per the ramp itself |
+| R-07 Plan drift | `planner` | Already the plan's own author |
+| R-08 Spec changed mid-work | `planner` | Spec/plan work, Analyst-flavored |
+| R-09 Context fog / handoff | whichever session hit it | Tier-agnostic — it's a state-file/handoff problem, not a reasoning-depth one |
+| R-10 Ambiguity | `planner` | Options-with-costs is exactly `planner`'s job |
+| R-11 Safe rollback | `builder` | `git revert` + a risk report is execution, not a new judgment call |
+| R-12 Performance target missed | `builder` | Measure → one optimization → re-measure is disciplined execution |
+| R-13 Critical security finding | `security` (detects/escalates) → `builder` (fix) → `test-writer` (regression test) | Same multi-agent shape as R-04 — detection, fix, and proof are different kinds of work |
