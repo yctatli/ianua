@@ -22,7 +22,10 @@ action. Explicitly states whether `scripts/check`'s `security:` step ran and was
 absence or skip is itself a finding, not a footnote.
 
 **Escalates to the human when:** always — findings go to human triage (real / noise / investigate),
-same path as Reviewer's. Severity/exploitability unclear → R-05 (QA reproduction), not a guess.
+same path as Reviewer's, **except**: Critical/High severity (`docs/security.md`, "Severity &
+gating") cannot be closed as "noise" — say so explicitly if the human tries. Severity/exploitability
+unclear → R-05 (QA reproduction), not a guess. A Critical finding → R-13 immediately, don't wait for
+the rest of the review to finish first.
 
 **Recovery ramps:** R-05 (unverified finding), R-09 (context fog), R-10 (ambiguity — e.g. whether
-something is actually a trust boundary).
+something is actually a trust boundary), R-13 (Critical finding — stop and escalate now).

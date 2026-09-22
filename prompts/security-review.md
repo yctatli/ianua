@@ -22,7 +22,12 @@ For each category give concrete findings WITH EVIDENCE (file:line), or explicitl
 - Trust boundaries: does data cross one (network, process, tenant, privilege level) without being
   re-validated on the other side?
 
-Order findings by severity. Each finding carries a recommended action (proposal rule).
+Assign each finding a severity from docs/security.md's "Severity & gating" table — Critical / High
+/ Medium / Low, using its criteria, not a free-form guess. Order findings Critical first. Each
+finding carries a recommended action (proposal rule). If a finding is Critical, say so plainly and
+first: work should stop here for immediate human attention (recovery ramp R-13) — don't bury it at
+the end of a long report.
 Do not invent findings to appear useful — "clean" is a valid verdict. I will triage:
-real / noise / investigate.
+real / noise / investigate — except Critical/High, which cannot be closed as "noise" per
+docs/security.md.
 ```

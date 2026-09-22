@@ -13,4 +13,4 @@ Almost every prompt follows the same anatomy — knowing it lets you re-derive a
 [APPROVAL]      → where it must stop for a human decision
 ```
 
-`recovery/` holds the safe ramps (R-01…R-12) for when things go wrong.
+`recovery/` holds the safe ramps (R-01…R-13) for when things go wrong.

@@ -97,7 +97,7 @@ Pick per project — or per feature.
 | `docs/roles/` | Role cards bound to responsibility, not technology: Analyst, Developer, Reviewer, **Security**, QA. Producer and verifier are never the same session. See "Roles" below. |
 | `specs/` | One spec per piece of work: intent, behavior, testable acceptance criteria. `active/` → `done/` (immutable once shipped, no override). Plans live in `specs/plans/`. |
 | `workflows/` | The processes: bootstrap, feature-development, bug-fix, refactor, incident. Exactly one runs per task, matched to what it is — never all of them at once. Each step points to its prompt. |
-| `prompts/` | Reusable prompt bodies with placeholders. `prompts/recovery/` is the catalog of safe ramps (R-01…R-12) for when things go wrong. |
+| `prompts/` | Reusable prompt bodies with placeholders. `prompts/recovery/` is the catalog of safe ramps (R-01…R-13) for when things go wrong. |
 | `adapters/` | Per-tool wiring. `scripts/init <tool>` installs one. Claude Code and Codex CLI adapters both include model/effort routing and a security-role subagent/skill — see each adapter's own README. |
 | `scripts/check` | The single verification contract: humans, agents, hooks, and CI all run this one command. Stack-specific internals (including a `security:` step) live in `check.conf`, written at bootstrap. |
 | `scripts/doctor` | Workspace health: structure, configuration state, adapter presence. |
@@ -134,6 +134,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0003](docs/decisions/0003-security-enforcement.md) | Security as an enforced `check.conf` step + skill-backed review pass | Superseded by 0004 (its automated-check decisions still stand) |
 | [0004](docs/decisions/0004-dedicated-security-role.md) | Dedicated Security role, mode-graduated (reverses one call in 0003) | Accepted |
 | [0005](docs/decisions/0005-core-file-lock.md) | Core-file-lock: protect this workspace's own process files during dev | Accepted |
+| [0006](docs/decisions/0006-security-severity-gating.md) | Security finding severity taxonomy (Critical/High/Medium/Low) + ship-gating | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).

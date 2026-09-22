@@ -24,6 +24,23 @@ gate, not just something a reviewer eyeballs. Two kinds, add what applies:
   security rule sets enabled.
 A step that isn't wired into scripts/check.conf is advice an agent can silently skip; wire it in. -->
 
+## Severity & gating
+Every security finding (from Security's pass, Reviewer's security dimension, or the automated
+`security:` check) gets one of four severities — the finder assigns it from this table, not a
+free-form guess:
+
+| Severity | Examples | Ship rule |
+|---|---|---|
+| **Critical** | RCE, auth bypass, a secret committed to the repo, unauthenticated access to sensitive data, SQL injection with data access | Triage as "noise" is **not allowed**. Fix before ship, or ship only behind a dedicated ADR that names the accepted risk, its owner, and a revisit trigger (`docs/decisions/README.md`) — never a one-line triage note. Recovery ramp R-13. |
+| **High** | Privilege escalation, significant data exposure, stored XSS, missing authZ on a sensitive endpoint | Blocks ship in **strict** mode. In **lite** mode, shipping without a fix needs explicit written human sign-off — not a silent "noise." |
+| **Medium** | Boundary input-validation gaps, stack traces/internal errors leaking to users, missing rate limiting | May ship — but only with a tracked follow-up: a new `specs/active/` entry, not just a triage note that evaporates. |
+| **Low** | Best-practice deviations, defense-in-depth suggestions, a non-vulnerable outdated dependency | Normal triage — human's call, deferrable freely. |
+
+A vulnerability found in code that's **already shipped** (an ad hoc `/security` pass, not a
+pre-ship review) is not a new spec — it's `workflows/incident.md`. The Critical/High ship rules
+above still apply there; Critical additionally triggers recovery ramp R-13
+(`prompts/recovery/critical-security-finding.md`) immediately, before anything else continues.
+
 ## Review lens
 Security is a mandatory dimension of every independent review, not a separate afterthought phase —
 automated checks catch known patterns, a human/model read catches design-level issues (authz gaps,

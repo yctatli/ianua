@@ -24,8 +24,9 @@ what is deliberately NOT being done. Decisions from clarifying questions are fol
 - [ ] Every acceptance criterion mapped to proof (test or reproducible observation)
 - [ ] `scripts/check` green (this includes the security step — see docs/security.md)
 - [ ] Independent review done; real findings fixed, noise rejected with written rationale
-- [ ] Security dimension of review explicitly addressed: clean, or findings triaged (not silently
-      skipped because nothing "looked" dangerous)
+- [ ] Security dimension of review explicitly addressed: clean, or findings triaged by severity
+      (`docs/security.md`) — no open Critical/High finding without a fix or a dedicated
+      risk-acceptance ADR
 - [ ] Docs / ADRs updated if behavior or architecture changed
 - [ ] Spec moved to `specs/done/` (it becomes immutable there)
 
