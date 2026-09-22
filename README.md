@@ -208,6 +208,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0008](docs/decisions/0008-bmad-adoption.md) | Selective BMAD-METHOD adoption: status rollup, trivial-change exception, epics, lesson | Accepted |
 | [0009](docs/decisions/0009-rename-to-ianua.md) | Rename the project: ANEW → Ianua | Accepted |
 | [0010](docs/decisions/0010-nested-install.md) | Nested install: `.ianua/` as a symlinked clone for existing repos | Accepted |
+| [0011](docs/decisions/0011-chat-language.md) | Bootstrap asks for a chat language, recorded in `AGENTS.md` | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).

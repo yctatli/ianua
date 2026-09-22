@@ -211,6 +211,7 @@ tamamını oku; burası sadece bir indeks:
 | [0008](docs/decisions/0008-bmad-adoption.md) | Seçici BMAD-METHOD benimsemesi: durum özeti, trivial-change istisnası, epic'ler, ders | Accepted |
 | [0009](docs/decisions/0009-rename-to-ianua.md) | Projeyi yeniden adlandır: ANEW → Ianua | Accepted |
 | [0010](docs/decisions/0010-nested-install.md) | Nested kurulum: mevcut repolar için symlink'li bir klon olarak `.ianua/` | Accepted |
+| [0011](docs/decisions/0011-chat-language.md) | Bootstrap sohbet dilini sorar, `AGENTS.md`'de kaydeder | Accepted |
 
 Bir sonrakini tartışıp kaydetmek için `/adr` (Claude Code) ya da `$adr` (Codex) kullan — önce
 önerili seçenekler sunar, dosyayı sadece sen karar verdikten sonra yazar (`prompts/adr.md`).

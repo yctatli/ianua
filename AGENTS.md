@@ -9,6 +9,9 @@
 **Mode: unset** — bootstrap sets this to `lite` or `strict` (see `workflows/README.md`).
 Every workflow honors the gates of the current mode.
 
+**Chat language: unset** — bootstrap asks and sets this (e.g. `Turkish`; code/docs/commits stay
+English unless stated otherwise). Until set, respond in whatever language the human writes in.
+
 ## Invariant rules (these survive bootstrap — never delete or weaken them)
 
 1. **No spec, no code.** Every piece of work starts as a spec in `specs/active/` (from `specs/TEMPLATE.md`) — except the narrow trivial-change exception in `workflows/README.md`.

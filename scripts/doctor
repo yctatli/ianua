@@ -53,6 +53,12 @@ else
   ok "operating mode set"
 fi
 
+if grep -qi "Chat language: unset" "$ROOT/AGENTS.md" 2>/dev/null; then
+  warn "chat language not set — bootstrap asks and sets it in AGENTS.md"
+else
+  ok "chat language set"
+fi
+
 if grep -q "Invariant rules" "$ROOT/AGENTS.md" 2>/dev/null; then
   ok "AGENTS.md invariant rules block present"
 else

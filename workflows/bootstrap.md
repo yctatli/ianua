@@ -18,13 +18,17 @@ INSPECT → INTERVIEW → GENERATE → VERIFY → REPORT
 2. **INTERVIEW.** One topic at a time, every question carrying the agent's recommendation
    (proposal rule): product & domain terms, architecture style and module boundaries, forbidden
    dependencies, conventions that matter (data rules, error handling), testing expectations,
-   security posture, git rules, and **operating mode (lite/strict)**.
+   security posture, git rules, **operating mode (lite/strict)**, and **chat language** (what
+   language the agent should respond in day to day — recommend matching the language the human is
+   writing this interview in; code, docs, and commits stay English by default regardless, unless
+   the human says otherwise).
    **[GATE: human]** — your answers are the input; nothing is assumed.
 
 3. **GENERATE.** The agent fills `docs/*.md` from the interview, writes `scripts/check.conf`
-   (build/test/lint commands for your stack), sets the mode line in `AGENTS.md`, and rewrites
-   `AGENTS.md`'s project summary — **keeping the invariant rules block verbatim** and keeping the
-   file ≤ 40 lines. For existing repos it may also propose toolchain steps for `.github/workflows/check.yml`.
+   (build/test/lint commands for your stack), sets the mode and chat-language lines in `AGENTS.md`,
+   and rewrites `AGENTS.md`'s project summary — **keeping the invariant rules block verbatim** and
+   keeping the file ≤ 40 lines. For existing repos it may also propose toolchain steps for
+   `.github/workflows/check.yml`.
 
 4. **VERIFY.** Run `./scripts/doctor` (structure + configuration) and `./scripts/check`
    (must pass; in an empty greenfield it may be a no-op with a note). Context quiz: open a *fresh*
