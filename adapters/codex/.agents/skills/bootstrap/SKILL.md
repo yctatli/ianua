@@ -8,5 +8,9 @@ from the real project root instead.
 
 Read AGENTS.md, then execute workflows/bootstrap.md using the prompt in prompts/bootstrap.md.
 Interview one topic at a time, always with your recommendation (proposal rule). Stop at every
-human gate. When generating, keep the AGENTS.md invariant rules verbatim and the file ≤ 40 lines.
-Finish by running ./scripts/doctor and ./scripts/check and reporting results and open decisions.
+human gate. If the working tree has application code, ask domain depth (deep code read vs
+interview-only) before the interview, with your recommendation — deep mode means you actually read
+the business-logic files yourself before drafting docs/domain.md and docs/architecture.md, not
+inferring them from the interview alone. When generating, keep the AGENTS.md invariant rules
+verbatim and the file ≤ 40 lines. Finish by running ./scripts/doctor and ./scripts/check and
+reporting results and open decisions.

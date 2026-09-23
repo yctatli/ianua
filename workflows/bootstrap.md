@@ -21,6 +21,18 @@ INSPECT → INTERVIEW → GENERATE → VERIFY → REPORT
    Contains code → adoption flow: detect stack(s), build system, test setup, and existing
    conventions *from the code*, to be confirmed rather than asked from scratch.
 
+   Adoption flow only — ask **domain depth**, with a recommendation (proposal rule): **deep** (the
+   agent reads the actual business-logic code itself — services, handlers, domain/model layers —
+   and drafts `docs/domain.md`/`docs/architecture.md` from it, for the human to correct rather than
+   write from scratch) vs **shallow** (those docs are filled from the INTERVIEW answers alone, as
+   below — faster, but only as complete as what the human says out loud). Recommend deep whenever
+   the codebase is non-trivial, the mode is landing on `strict`, or anything revenue/compliance-
+   sensitive came up in INSPECT; shallow is a fine call for a small or low-stakes adoption. **[GATE:
+   human]**. Deep mode is Clarify/Plan-tier judgment work, not mechanical transcription — Claude
+   Code routes it to `planner`. `docs/domain.md`/`docs/architecture.md` get a one-line provenance
+   note either way ("drafted from code, corrected against your answers" vs "from interview only"),
+   so a later session isn't silently guessing which one happened.
+
 2. **INTERVIEW.** One topic at a time, every question carrying the agent's recommendation
    (proposal rule): product & domain terms, architecture style and module boundaries, forbidden
    dependencies, conventions that matter (data rules, error handling), testing expectations,
@@ -30,16 +42,19 @@ INSPECT → INTERVIEW → GENERATE → VERIFY → REPORT
    the human says otherwise).
    **[GATE: human]** — your answers are the input; nothing is assumed.
 
-3. **GENERATE.** The agent fills `docs/*.md` from the interview, writes `scripts/check.conf`
-   (build/test/lint commands for your stack), sets the mode and chat-language lines in `AGENTS.md`,
-   and rewrites `AGENTS.md`'s project summary — **keeping the invariant rules block verbatim** and
-   keeping the file ≤ 40 lines. For existing repos it may also propose toolchain steps for
-   `.github/workflows/check.yml`.
+3. **GENERATE.** The agent fills `docs/*.md` from the interview — `docs/domain.md` and
+   `docs/architecture.md` from the chosen domain-depth pass (deep: drafted from the code, then
+   corrected against the interview; shallow: from the interview alone), each carrying its
+   provenance note — writes `scripts/check.conf` (build/test/lint commands for your stack), sets
+   the mode and chat-language lines in `AGENTS.md`, and rewrites `AGENTS.md`'s project summary —
+   **keeping the invariant rules block verbatim** and keeping the file ≤ 40 lines. For existing
+   repos it may also propose toolchain steps for `.github/workflows/check.yml`.
 
 4. **VERIFY.** Run `./scripts/doctor` (structure + configuration) and `./scripts/check`
    (must pass; in an empty greenfield it may be a no-op with a note). Context quiz: open a *fresh*
    session and ask a project question (e.g. "what type do money fields use?") — the agent must
    answer from files. If it can't, the docs aren't teaching; fix them.
 
-5. **REPORT.** What was generated, what was assumed, what still needs a human decision.
-   **[GATE: human]** — you approve the workspace before the first feature starts.
+5. **REPORT.** What was generated (including which domain depth was used and why), what was
+   assumed, what still needs a human decision. **[GATE: human]** — you approve the workspace
+   before the first feature starts.

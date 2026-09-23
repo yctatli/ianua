@@ -310,6 +310,7 @@ tamamını oku; burası sadece bir indeks:
 | [0010](docs/decisions/0010-nested-install.md) | Nested kurulum: mevcut repolar için symlink'li bir klon olarak `.ianua/` | Accepted |
 | [0011](docs/decisions/0011-chat-language.md) | Bootstrap sohbet dilini sorar, `AGENTS.md`'de kaydeder | Accepted |
 | [0012](docs/decisions/0012-tui-dashboard.md) | Opsiyonel TUI dashboard (`tui/`), core dışında, bilinçli bir bağımlılık istisnası | Accepted |
+| [0013](docs/decisions/0013-domain-depth.md) | Mevcut bir kod tabanını adapte etmeden önce bootstrap "domain depth" sorar (derin kod okuma vs sadece interview) | Accepted |
 
 Bir sonrakini tartışıp kaydetmek için `/adr` (Claude Code) ya da `$adr` (Codex) kullan — önce
 önerili seçenekler sunar, dosyayı sadece sen karar verdikten sonra yazar (`prompts/adr.md`).

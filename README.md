@@ -308,6 +308,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0010](docs/decisions/0010-nested-install.md) | Nested install: `.ianua/` as a symlinked clone for existing repos | Accepted |
 | [0011](docs/decisions/0011-chat-language.md) | Bootstrap asks for a chat language, recorded in `AGENTS.md` | Accepted |
 | [0012](docs/decisions/0012-tui-dashboard.md) | Optional TUI dashboard (`tui/`), outside core, a deliberate dependency exception | Accepted |
+| [0013](docs/decisions/0013-domain-depth.md) | Bootstrap asks "domain depth" (deep code read vs interview-only) before adopting an existing codebase | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).
