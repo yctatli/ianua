@@ -14,3 +14,6 @@ Thumbs.db
 
 # Claude Code personal settings (shared settings.json IS committed after init)
 .claude/settings.local.json
+
+# tui/ build artifact (source is committed, the compiled binary isn't — see tui/README.md)
+/tui/ianua-tui

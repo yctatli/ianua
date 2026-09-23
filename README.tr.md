@@ -215,8 +215,9 @@ ajanın uymayı tercih ettiği isteklerden değil.
 
 ## İlerlemeyi izleme
 
-Ayrı bir dashboard yok — görünürlük, açık tutman gereken bir arayüzden değil, workflow
-dosyalarından ve spec'lerin kendisinden gelir:
+Ayrı bir dashboard zorunlu değil — görünürlük, açık tutman gereken bir arayüzden değil, workflow
+dosyalarından ve spec'lerin kendisinden gelir. Yine de bir ekrana bakmayı tercih edersen opsiyonel,
+interaktif bir tanesi var (bu bölümün sonuna bak):
 
 - **Çalışırken:** ajan zaten workflow dosyasını adım adım okuyor ve her adımı chat'te anlatıyor —
   "spec'i yazıyorum," "plan hazır, onayın gerekiyor," "build bitti, review'a devrediyorum." Her
@@ -240,6 +241,15 @@ dosyalarından ve spec'lerin kendisinden gelir:
 `scripts/status`'u çalıştır; gerçekten geçip geçmediği için chat'teki bir iddiaya değil,
 `scripts/check`'in exit code'una güven.
 
+**Kayan yazı yerine bir ekran mı tercih edersin?** `tui/`, aynı üç şeyi — Health (`doctor`), Status
+(`status`), Adapters (`init`) — üç ayrı komut yerine tek interaktif ekranda toplayan, opsiyonel,
+salt-okunur bir terminal dashboard'u ([lazyskills.sh](https://lazyskills.sh/) tarzı):
+```bash
+cd tui && go build -o ianua-tui . && ./ianua-tui    # proje kökünden — bkz. tui/README.md
+```
+Core'un bir parçası değil (yukarıdaki "Üç katman"a bak) — aynı dosyaları okuyan, hiçbir şey
+yazmayan, başka hiçbir şeyin varlığına bağlı olmadığı ayrı bir Go modülü.
+
 ## Kutunun içinde ne var
 
 Aşağıdaki yollar, Ianua'nın core'unun gerçekte yaşadığı yere görelidir: template kurulumda repo
@@ -259,6 +269,7 @@ kökü, nested kurulumda `.ianua/` (bkz. "Bunu zaten sahip olduğun bir projede 
 | `scripts/doctor` | Workspace sağlığı: yapı, konfigürasyon durumu, adapter varlığı. |
 | `scripts/status` | `specs/active/`'deki her spec'in (durum, mode, DoD ilerlemesi, security-boyutu durumu) ve varsa epic'lerin türetilmiş bir özeti — hiçbiri elle bakılmaz, her seferinde aynı dosyalardan yeniden üretilir. |
 | `.github/` | Aynı `scripts/check`'i çalıştıran CI + kapıları yansıtan bir PR şablonu. |
+| `tui/` | *Opsiyonel, core değil* — salt-okunur terminal dashboard'u, kendi Go modülü. Yukarıdaki "İlerlemeyi izleme"ye ve `tui/README.md`'ye bak. |
 
 ## Roller
 
@@ -298,6 +309,7 @@ tamamını oku; burası sadece bir indeks:
 | [0009](docs/decisions/0009-rename-to-ianua.md) | Projeyi yeniden adlandır: ANEW → Ianua | Accepted |
 | [0010](docs/decisions/0010-nested-install.md) | Nested kurulum: mevcut repolar için symlink'li bir klon olarak `.ianua/` | Accepted |
 | [0011](docs/decisions/0011-chat-language.md) | Bootstrap sohbet dilini sorar, `AGENTS.md`'de kaydeder | Accepted |
+| [0012](docs/decisions/0012-tui-dashboard.md) | Opsiyonel TUI dashboard (`tui/`), core dışında, bilinçli bir bağımlılık istisnası | Accepted |
 
 Bir sonrakini tartışıp kaydetmek için `/adr` (Claude Code) ya da `$adr` (Codex) kullan — önce
 önerili seçenekler sunar, dosyayı sadece sen karar verdikten sonra yazar (`prompts/adr.md`).

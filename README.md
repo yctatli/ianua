@@ -213,8 +213,9 @@ just requests the agent happens to honor.
 
 ## Monitoring progress
 
-There's no separate dashboard — visibility comes from the workflow files and the specs themselves,
-not a UI you have to keep open:
+No dashboard is required — visibility comes from the workflow files and the specs themselves, not
+a UI you have to keep open. An optional interactive one exists if you'd rather look at one anyway
+(see the end of this section):
 
 - **While it's running:** the agent is literally reading the workflow file step by step and
   narrating each one in chat — "writing the spec," "plan's ready, need your approval," "build
@@ -238,6 +239,16 @@ So: watch the chat transcript for what's happening *right now*, run `scripts/sta
 point-in-time rollup of *everything*, and trust `scripts/check`'s exit code — not a claim in
 chat — for whether it actually passed.
 
+**Prefer a screen over scrolling text?** `tui/` is an optional, read-only terminal dashboard
+([lazyskills.sh](https://lazyskills.sh/)-style) that puts the same three things — Health
+(`doctor`), Status (`status`), Adapters (`init`) — in one interactive view instead of three
+commands:
+```bash
+cd tui && go build -o ianua-tui . && ./ianua-tui    # from the project root — see tui/README.md
+```
+Not part of core (see "The three layers" above) — it's a separate Go module that reads the same
+files, writes nothing, and nothing else depends on it existing.
+
 ## What's in the box
 
 Paths below are relative to wherever Ianua's core actually lives: the repo root in a template
@@ -257,6 +268,7 @@ install, `.ianua/` in a nested one (see "Using this in a project you already hav
 | `scripts/doctor` | Workspace health: structure, configuration state, adapter presence. |
 | `scripts/status` | A derived rollup of every spec in `specs/active/` (status, mode, DoD progress, security-dimension state) and any epics — nothing hand-maintained, regenerated from the same files every time. |
 | `.github/` | CI that runs the same `scripts/check` + a PR template mirroring the gates. |
+| `tui/` | *Optional, not core* — a read-only terminal dashboard, its own Go module. See "Monitoring progress" above and `tui/README.md`. |
 
 ## Roles
 
@@ -295,6 +307,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0009](docs/decisions/0009-rename-to-ianua.md) | Rename the project: ANEW → Ianua | Accepted |
 | [0010](docs/decisions/0010-nested-install.md) | Nested install: `.ianua/` as a symlinked clone for existing repos | Accepted |
 | [0011](docs/decisions/0011-chat-language.md) | Bootstrap asks for a chat language, recorded in `AGENTS.md` | Accepted |
+| [0012](docs/decisions/0012-tui-dashboard.md) | Optional TUI dashboard (`tui/`), outside core, a deliberate dependency exception | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).
