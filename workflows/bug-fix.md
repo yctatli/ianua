@@ -19,7 +19,9 @@ REPORT → REPRODUCE (red test) → DIAGNOSE → FIX → PROVE → REVIEW → SH
    (else R-04: revert first). The reproduction test stays forever as a regression guard.
 6. **REVIEW** — fresh session, narrow scope: the fix diff. Strict mode, if the fix touches
    auth/input/data handling: also a separate Security pass (`docs/roles/security.md`).
-   **[GATE: human — strict]** triage.
+   **[GATE: human — strict]** triage. If this fix escalated to a mini-spec with a plan (step 7),
+   record findings in that plan's **Findings log**, same convention as feature-development — a
+   one-off fix with no plan file can skip this, the fix diff itself is the record.
 7. **SHIP.** Small bugs: PR referencing the report. Behavior-changing fixes: they're features —
    write a mini-spec first. If this fix has a spec (mini or full), fill its Scorecard and — if the
    numbers show real friction — its Lesson section too.

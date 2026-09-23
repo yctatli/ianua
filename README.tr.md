@@ -228,8 +228,10 @@ interaktif bir tanesi var (bu bölümün sonuna bak):
   ./scripts/status      # nested kurulum: ./.ianua/scripts/status
   ```
   `specs/active/`'deki her spec'i okuyup Status'unu, Mode'unu, plan durumunu, Definition-of-Done
-  ilerlemesini (`3/6 checked` — spec'in kendi `- [x]` checkbox'larından türetilir) ve security
-  boyutunun ele alınıp alınmadığını gösterir — artı varsa epic'ler. Burada hiçbir şey elle
+  ilerlemesini (`3/6 checked` — spec'in kendi `- [x]` checkbox'larından türetilir), planının
+  **Findings log**'unun özetini (`2 open, 5 fixed, 1 noise, 1 deferred` — her review turunun
+  bulgularının chat'te değil dosyada kalıcı kaydı) ve security boyutunun ele alınıp alınmadığını
+  gösterir — artı varsa epic'ler. Burada hiçbir şey elle
   tutulmuyor; her seferinde aynı dosyalardan yeniden üretiliyor, o yüzden gerçeklikten asla sapmaz.
 - **Gerçekten yeşil mi?**
   ```bash
@@ -267,7 +269,7 @@ kökü, nested kurulumda `.ianua/` (bkz. "Bunu zaten sahip olduğun bir projede 
 | `adapters/` | Araca özel kablolama. `scripts/init <tool>` birini kurar. Claude Code ve Codex CLI adaptörlerinin ikisi de model/effort routing ve bir security-role subagent/skill içerir — her adaptörün kendi README'sine bak. |
 | `scripts/check` | Tek doğrulama sözleşmesi: insanlar, ajanlar, hook'lar ve CI hepsi bu tek komutu çalıştırır. Stack'e özel içerik (bir `security:` adımı dahil) bootstrap'ta yazılan `check.conf`'ta yaşar. |
 | `scripts/doctor` | Workspace sağlığı: yapı, konfigürasyon durumu, adapter varlığı. |
-| `scripts/status` | `specs/active/`'deki her spec'in (durum, mode, DoD ilerlemesi, security-boyutu durumu) ve varsa epic'lerin türetilmiş bir özeti — hiçbiri elle bakılmaz, her seferinde aynı dosyalardan yeniden üretilir. |
+| `scripts/status` | `specs/active/`'deki her spec'in (durum, mode, DoD ilerlemesi, planının Findings-log özeti, security-boyutu durumu) ve varsa epic'lerin türetilmiş bir özeti — hiçbiri elle bakılmaz, her seferinde aynı dosyalardan yeniden üretilir. |
 | `.github/` | Aynı `scripts/check`'i çalıştıran CI + kapıları yansıtan bir PR şablonu. |
 | `tui/` | *Opsiyonel, core değil* — salt-okunur terminal dashboard'u, kendi Go modülü. Yukarıdaki "İlerlemeyi izleme"ye ve `tui/README.md`'ye bak. |
 
@@ -311,6 +313,7 @@ tamamını oku; burası sadece bir indeks:
 | [0011](docs/decisions/0011-chat-language.md) | Bootstrap sohbet dilini sorar, `AGENTS.md`'de kaydeder | Accepted |
 | [0012](docs/decisions/0012-tui-dashboard.md) | Opsiyonel TUI dashboard (`tui/`), core dışında, bilinçli bir bağımlılık istisnası | Accepted |
 | [0013](docs/decisions/0013-domain-depth.md) | Mevcut bir kod tabanını adapte etmeden önce bootstrap "domain depth" sorar (derin kod okuma vs sadece interview) | Accepted |
+| [0014](docs/decisions/0014-findings-log.md) | Plan üzerinde kalıcı bir Findings log, sadece chat'te değil | Accepted |
 
 Bir sonrakini tartışıp kaydetmek için `/adr` (Claude Code) ya da `$adr` (Codex) kullan — önce
 önerili seçenekler sunar, dosyayı sadece sen karar verdikten sonra yazar (`prompts/adr.md`).

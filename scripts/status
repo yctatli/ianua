@@ -10,6 +10,35 @@ EPICS="$ROOT/specs/epics"
 
 field() { grep -m1 "^- $1:" "$2" 2>/dev/null | sed "s/^- $1: *//"; }
 
+# Rolls up a plan's "## Findings log" table (specs/plans/TEMPLATE.md) into one counts line.
+# Never hand-maintained either — same derived-from-files spirit as the rest of this script.
+findings_summary() {
+  plan="$1"
+  [ -f "$plan" ] || return
+  awk '
+    /^## Findings log/ { insec=1; next }
+    /^## / { if (insec) exit }
+    insec && /^\|/ {
+      n = split($0, f, "|")
+      id = f[2]; gsub(/^[ \t]+|[ \t]+$/, "", id)
+      if (id == "" || id == "ID" || id ~ /^-+$/) next
+      status = f[7]; gsub(/^[ \t]+|[ \t]+$/, "", status)
+      s = tolower(status)
+      if (s ~ /^open/) open++
+      else if (s ~ /^fixed/) fixed++
+      else if (s ~ /^noise/) noise++
+      else if (s ~ /^deferred/) deferred++
+      else other++
+    }
+    END {
+      total = open + fixed + noise + deferred + other
+      if (total > 0) {
+        printf "  findings: %d open, %d fixed, %d noise, %d deferred\n", open, fixed, noise, deferred
+      }
+    }
+  ' "$plan"
+}
+
 echo "== Ianua status =="
 
 count=0
@@ -44,6 +73,7 @@ for f in "$ACTIVE"/*.md; do
   echo "$base — ${name:-?}"
   echo "  status: ${status:-?}  ·  mode: ${mode:-?}  ·  plan: $plan_status"
   echo "  DoD: $dod_done/$dod_total checked  ·  security: $sec"
+  findings_summary "$plan"
   [ -n "$epic" ] && [ "$epic" != "" ] && echo "  epic: $epic"
 done
 

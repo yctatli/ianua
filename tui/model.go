@@ -164,6 +164,15 @@ func (m model) viewStatus() string {
 			"  status: %s · mode: %s · plan: %s\n  DoD: %d/%d checked\n",
 			orDash(s.Status), orDash(s.Mode), plan, s.DoDDone, s.DoDTotal,
 		)))
+		if s.Findings.Total() > 0 {
+			line := fmt.Sprintf("  findings: %d open, %d fixed, %d noise, %d deferred",
+				s.Findings.Open, s.Findings.Fixed, s.Findings.Noise, s.Findings.Deferred)
+			if s.Findings.Open > 0 {
+				b.WriteString(warnStyle.Render(line) + "\n")
+			} else {
+				b.WriteString(mutedStyle.Render(line) + "\n")
+			}
+		}
 		if s.Epic != "" {
 			b.WriteString(mutedStyle.Render("  epic: "+s.Epic) + "\n")
 		}

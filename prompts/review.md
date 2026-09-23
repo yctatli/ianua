@@ -15,9 +15,10 @@ For each dimension give concrete findings WITH EVIDENCE (file:line), or explicit
 - Tests: criterion↔test map complete? Do tests assert BEHAVIOR or just status codes?
 - Maintainability: naming, layer violations (docs/architecture.md), dead code.
 
-Order findings by severity. Each finding carries a recommended action (proposal rule).
-Do not invent findings to appear useful — "clean" is a valid verdict. I will triage:
-real / noise / investigate.
+Order findings by severity, each with a short ID (F-1, F-2, ...). Each finding carries a
+recommended action (proposal rule). Do not invent findings to appear useful — "clean" is a valid
+verdict. I will triage: real / noise / investigate, and record each one in the plan's Findings log
+— you're read-only, so that recording is my job, not yours.
 ```
 
 In **strict** mode, security may instead get its own dedicated, independent pass

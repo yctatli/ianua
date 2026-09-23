@@ -226,9 +226,11 @@ a UI you have to keep open. An optional interactive one exists if you'd rather l
   ./scripts/status      # nested install: ./.ianua/scripts/status
   ```
   Reads every spec in `specs/active/` and prints its Status, Mode, plan status, Definition-of-Done
-  progress (`3/6 checked`, derived from the spec's own `- [x]` checkboxes), and whether the
-  security dimension of review is addressed or still open — plus any epics. Nothing here is
-  hand-maintained; it's regenerated from the same files every time, so it can't drift from reality.
+  progress (`3/6 checked`, derived from the spec's own `- [x]` checkboxes), its plan's **Findings
+  log** rolled up (`2 open, 5 fixed, 1 noise, 1 deferred` — the persistent, file-based record of
+  every review round's findings, not just what was said in chat), and whether the security
+  dimension of review is addressed or still open — plus any epics. Nothing here is hand-maintained;
+  it's regenerated from the same files every time, so it can't drift from reality.
 - **Is it actually green?**
   ```bash
   ./scripts/check       # prints "==> build", "==> test", "==> security", ... — stops at the first failure
@@ -266,7 +268,7 @@ install, `.ianua/` in a nested one (see "Using this in a project you already hav
 | `adapters/` | Per-tool wiring. `scripts/init <tool>` installs one. Claude Code and Codex CLI adapters both include model/effort routing and a security-role subagent/skill — see each adapter's own README. |
 | `scripts/check` | The single verification contract: humans, agents, hooks, and CI all run this one command. Stack-specific internals (including a `security:` step) live in `check.conf`, written at bootstrap. |
 | `scripts/doctor` | Workspace health: structure, configuration state, adapter presence. |
-| `scripts/status` | A derived rollup of every spec in `specs/active/` (status, mode, DoD progress, security-dimension state) and any epics — nothing hand-maintained, regenerated from the same files every time. |
+| `scripts/status` | A derived rollup of every spec in `specs/active/` (status, mode, DoD progress, its plan's Findings-log rollup, security-dimension state) and any epics — nothing hand-maintained, regenerated from the same files every time. |
 | `.github/` | CI that runs the same `scripts/check` + a PR template mirroring the gates. |
 | `tui/` | *Optional, not core* — a read-only terminal dashboard, its own Go module. See "Monitoring progress" above and `tui/README.md`. |
 
@@ -309,6 +311,7 @@ Read the full ADRs for the actual rationale and alternatives considered; this is
 | [0011](docs/decisions/0011-chat-language.md) | Bootstrap asks for a chat language, recorded in `AGENTS.md` | Accepted |
 | [0012](docs/decisions/0012-tui-dashboard.md) | Optional TUI dashboard (`tui/`), outside core, a deliberate dependency exception | Accepted |
 | [0013](docs/decisions/0013-domain-depth.md) | Bootstrap asks "domain depth" (deep code read vs interview-only) before adopting an existing codebase | Accepted |
+| [0014](docs/decisions/0014-findings-log.md) | Persistent Findings log on the plan, not just chat | Accepted |
 
 Use `/adr` (Claude Code) or `$adr` (Codex) to discuss and record the next one — it drafts options
 with a recommendation first, writes the file only after you decide (`prompts/adr.md`).

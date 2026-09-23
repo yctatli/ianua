@@ -18,6 +18,17 @@ type Spec struct {
 	DoDTotal int
 	PlanFile string
 	PlanOK   bool
+	Findings FindingsCount
+}
+
+// FindingsCount mirrors scripts/status's findings_summary — a rollup of a plan's
+// "## Findings log" table (specs/plans/TEMPLATE.md), never hand-maintained.
+type FindingsCount struct {
+	Open, Fixed, Noise, Deferred, Other int
+}
+
+func (f FindingsCount) Total() int {
+	return f.Open + f.Fixed + f.Noise + f.Deferred + f.Other
 }
 
 type Epic struct {
@@ -51,6 +62,7 @@ func LoadSpecs(ws *Workspace) []Spec {
 			if _, err := os.Stat(planPath); err == nil {
 				s.PlanFile = num + "-plan.md"
 				s.PlanOK = true
+				s.Findings = parseFindingsLog(planPath)
 			}
 		}
 		specs = append(specs, s)
@@ -91,6 +103,71 @@ func LoadEpics(ws *Workspace) []Epic {
 		epics = append(epics, ep)
 	}
 	return epics
+}
+
+// parseFindingsLog reads a plan file's "## Findings log" table and tallies the Status column —
+// the same logic as scripts/status's findings_summary awk function, kept in sync by hand
+// (docs/decisions/0012-tui-dashboard.md flags this as the real cost of a second implementation).
+func parseFindingsLog(planPath string) FindingsCount {
+	var fc FindingsCount
+	f, err := os.Open(planPath)
+	if err != nil {
+		return fc
+	}
+	defer f.Close()
+
+	sc := bufio.NewScanner(f)
+	inSection := false
+	for sc.Scan() {
+		line := sc.Text()
+		if strings.HasPrefix(line, "## Findings log") {
+			inSection = true
+			continue
+		}
+		if strings.HasPrefix(line, "## ") {
+			if inSection {
+				break
+			}
+			continue
+		}
+		if !inSection || !strings.HasPrefix(line, "|") {
+			continue
+		}
+		cols := strings.Split(line, "|")
+		if len(cols) < 8 {
+			continue
+		}
+		id := strings.TrimSpace(cols[1])
+		if id == "" || id == "ID" || isDashes(id) {
+			continue
+		}
+		status := strings.ToLower(strings.TrimSpace(cols[6]))
+		switch {
+		case strings.HasPrefix(status, "open"):
+			fc.Open++
+		case strings.HasPrefix(status, "fixed"):
+			fc.Fixed++
+		case strings.HasPrefix(status, "noise"):
+			fc.Noise++
+		case strings.HasPrefix(status, "deferred"):
+			fc.Deferred++
+		default:
+			fc.Other++
+		}
+	}
+	return fc
+}
+
+func isDashes(s string) bool {
+	if s == "" {
+		return false
+	}
+	for _, c := range s {
+		if c != '-' {
+			return false
+		}
+	}
+	return true
 }
 
 func parseSpec(path string) Spec {

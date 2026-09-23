@@ -18,4 +18,5 @@ BASELINE → SCOPE & PLAN → [APPROVAL] → REFACTOR → PROVE UNCHANGED → RE
 6. **REVIEW** — fresh session. Extra lens: did semantics sneak in? Are names/layers now *more*
    aligned with `docs/architecture.md`? Strict mode, if the refactor touches security-sensitive
    code: also a separate Security pass (`docs/roles/security.md`) — structure changes can silently
-   move a trust boundary even when "behavior" is unchanged.
+   move a trust boundary even when "behavior" is unchanged. **[GATE: human]** triage, same as
+   feature-development step 7 — record each finding + disposition in the plan's **Findings log**.

@@ -39,7 +39,7 @@ terminal required, useful in a script or CI step alongside (not instead of) `scr
 | Tab | Mirrors | Shows |
 |---|---|---|
 | **Health** | `scripts/doctor` | Structure completeness, recovery ramp count, AGENTS.md configuration state (status/mode/chat language/invariant block), `check.conf` presence, adapter presence, hook executable bits |
-| **Status** | `scripts/status` | Every spec in `specs/active/`: status, mode, plan written?, Definition-of-Done progress, epic membership — plus any epics |
+| **Status** | `scripts/status` | Every spec in `specs/active/`: status, mode, plan written?, Definition-of-Done progress, its plan's Findings log rolled up (open/fixed/noise/deferred), epic membership — plus any epics |
 | **Adapters** | `scripts/init` | Mode + chat language (from `AGENTS.md`), and which adapter discovery files exist at the project root, with symlink health (a nested install's `AGENTS.md`/`CLAUDE.md`/`.claude`/etc. should all resolve — a broken one shows in red) |
 
 Keys: `tab` / `←` `→` (or `1`/`2`/`3`) to switch tabs, `r` to refresh, `q`/`esc`/`ctrl+c` to quit.
