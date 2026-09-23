@@ -7,6 +7,12 @@
 `AGENTS.md`, `scripts/check.conf`, and (if adapters are installed) `.claude/`/`.codex/`/`.agents/`,
 all of which are protected by the core-file-lock hook (AGENTS.md rule 7) outside this flag.
 
+**Wrong-directory check, first:** if the current working directory is itself named `.ianua`, stop —
+don't bootstrap Ianua's own template as if it were the project. This happens when someone clones
+Ianua into `.ianua/` (a nested install, see `docs/decisions/0010-nested-install.md`) and then runs
+their AI tool from inside that folder instead of from the real project root one level up. Tell them
+to `cd ..` and re-launch there instead.
+
 ```
 INSPECT → INTERVIEW → GENERATE → VERIFY → REPORT
 ```

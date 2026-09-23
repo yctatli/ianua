@@ -3,6 +3,12 @@
 > **STATUS: NOT CONFIGURED.** This workspace has not been adapted to a project yet.
 > The only correct first action is the bootstrap workflow (`workflows/bootstrap.md`).
 > Until bootstrap completes and rewrites this file, do not write application code.
+>
+> **Wrong directory?** If your current working directory is itself named `.ianua` (or you were
+> launched from inside one), STOP — this is Ianua's own template, not the actual project. Tell the
+> human: `cd ..` (go up one level, out of `.ianua/`) and re-launch your AI tool from the real
+> project root instead — that's where `./.ianua/scripts/init <adapter>` installs `AGENTS.md` /
+> `CLAUDE.md` / `.claude/` for it. Do not bootstrap `.ianua/` itself as if it were the project.
 
 ## Operating mode
 

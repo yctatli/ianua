@@ -84,7 +84,11 @@ EOF
       chmod +x "$ROOT/.claude/hooks/"*.sh 2>/dev/null || true
       echo "Installed: CLAUDE.md, .claude/ (commands, agents, hooks, settings)."
     fi
-    echo "Next: open Claude Code here and run /bootstrap"
+    if [ "$NESTED" = 1 ]; then
+      echo "Next: cd $PROJECT_ROOT  (NOT .ianua/ — Claude Code must be launched from there), then run /bootstrap"
+    else
+      echo "Next: open Claude Code here and run /bootstrap"
+    fi
     ;;
   codex)
     if [ "$NESTED" = 1 ]; then
@@ -99,7 +103,11 @@ EOF
       cp -R "$ADAPTERS/codex/.codex/." "$ROOT/.codex/"
       echo "Installed: .agents/skills/ (workflow skills), .codex/hooks.json + .codex/hooks/ (policy hook), .codex/config.toml."
     fi
-    echo "Next: run 'codex' once in this repo and trust it (see adapters/codex/README.md), then invoke the bootstrap skill."
+    if [ "$NESTED" = 1 ]; then
+      echo "Next: cd $PROJECT_ROOT  (NOT .ianua/), trust it, run 'codex', then invoke the bootstrap skill."
+    else
+      echo "Next: run 'codex' once in this repo and trust it (see adapters/codex/README.md), then invoke the bootstrap skill."
+    fi
     ;;
   github-copilot)
     if [ "$NESTED" = 1 ]; then

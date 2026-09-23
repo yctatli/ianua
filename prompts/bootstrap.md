@@ -1,10 +1,14 @@
 # Prompt: Bootstrap
 
 ```
-Before anything else: this workspace's own process files (AGENTS.md, docs/roles/, docs/decisions/,
-workflows/, prompts/, scripts/, adapters/, and any installed .claude/.codex/.agents/) are protected
-by a core-file-lock hook (AGENTS.md rule 7). If IANUA_ALLOW_CORE_EDIT is not already set, tell me and
-wait — don't try to route around it.
+Before anything else: if the current working directory is itself named `.ianua`, STOP — this is
+Ianua's own template (likely cloned here as a nested install), not my actual project. Tell me to
+`cd ..` and re-launch you from the real project root instead; do not bootstrap `.ianua/` itself.
+
+This workspace's own process files (AGENTS.md, docs/roles/, docs/decisions/, workflows/, prompts/,
+scripts/, adapters/, and any installed .claude/.codex/.agents/) are protected by a core-file-lock
+hook (AGENTS.md rule 7). If IANUA_ALLOW_CORE_EDIT is not already set, tell me and wait — don't try
+to route around it.
 
 Read AGENTS.md and workflows/bootstrap.md. We are adapting this workspace to a real project.
 
