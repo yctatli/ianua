@@ -3,7 +3,7 @@
 ```
 Role: Developer. Execute the APPROVED plan specs/plans/<NNNN>-plan.md, step by step.
 
-- Work on branch <type>/<NNNN>-<name> (docs/git.md). Conventional Commits with plan references.
+- Conventional Commits with plan references (branching is the human's call — see `docs/git.md`).
 - Follow docs/conventions.md and docs/security.md.
 - Write the tests from the criterion↔test map as you go — tests assert behavior.
 - After each plan step: brief note on what you did. Needing to leave the plan? STOP → recovery

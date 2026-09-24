@@ -3,8 +3,9 @@
 > **Template — adjust at bootstrap.** Defaults below are safe; loosen consciously, not accidentally.
 
 ## Branching
-- `feature/<spec-no>-<short-name>` — **no branch without a spec.**
-- Fixes: `fix/<spec-no>-<short-name>`; incidents: `incident/<date>-<short-name>`.
+- The human creates and manages branches — agents do not branch or push on their own.
+- Naming, if you want a convention: `feature/<spec-no>-<short-name>` — **no branch without a spec.**
+  Fixes: `fix/<spec-no>-<short-name>`; incidents: `incident/<date>-<short-name>`.
 
 ## Commits
 - Conventional Commits, with a plan reference: `feat(catalog): paging endpoint [plan 0001/3]`.
